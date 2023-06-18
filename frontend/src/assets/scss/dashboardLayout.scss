@@ -1,5 +1,5 @@
 .full-height {
-  height: calc(100vh - 45px);
+  height: calc(100vh);
   overflow-y: auto;
 }
 .nav-bar {
@@ -56,7 +56,7 @@
     }
   }
   .active {
-    background-color: #4296bd;
+    background-color: #3e7874;
     color: #fff;
     border-radius: 6px;
   }

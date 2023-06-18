@@ -1,14 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content:["./src/**/*.{js,jsx}"],
+  content: ["./src/**/*.{js,jsx}"],
   theme: {
     extend: {},
     colors: {
       transparent: 'transparent',
       main: '#fff',
       black: '#000000',
-      primary: '#1679A8',
-      secondary: '#28A4E2',
+      primary: '#229F97',
+      secondary: '#4B8581',
       darkBlue: '#032B3D',
       customDarkBlue: '#383874',
       customGreen: '#00B929',

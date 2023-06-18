@@ -5,7 +5,7 @@ import AppServices from "../../services";
 import { useDispatch } from "react-redux";
 
 const initialState = {
-  user: { name: "test one two" },
+  user: { name: "invigilator" },
   isLoggedIn: false,
 };
 
