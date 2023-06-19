@@ -7,7 +7,7 @@ const {
 const {
     validateLaptopEmployee,
     LaptopEmployee
-} = require("../models/laptopOwner.model");
+} = require("../models/employee.model");
 const {
     validateObjectId
 } = require("../utils/imports");

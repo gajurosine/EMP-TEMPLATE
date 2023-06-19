@@ -1,12 +1,12 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/connectionPool");
 const Joi = require('joi');
-const jwt = require('jsonwebtoken');
+const { NationalIdPattern, PhoneRegex } = require("./user.model");
 
 /**
  * @swagger
  * definitions:
- *   User:
+ *   Employee:
  *     properties:
  *       _id:
  *         type: string
@@ -15,8 +15,6 @@ const jwt = require('jsonwebtoken');
  *       Last name:
  *         type: string
  *       email:
- *         type: string
- *       password:
  *         type: string
  *       phone:
  *         type: string
@@ -29,14 +27,13 @@ const jwt = require('jsonwebtoken');
  *     required:
  *       - names
  *       - email
- *       - password
  *       - phone
  *       - nationalId
  *       - department
  *       - position
  */
 
-var User = sequelize.define("users", {
+var Employee = sequelize.define("employees", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -72,10 +69,6 @@ var User = sequelize.define("users", {
     allowNull: false,
     unique: true,
   },
-  password: {
-    type: Sequelize.STRING(255),
-    allowNull: false,
-  },
   created_at: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
@@ -90,34 +83,26 @@ var User = sequelize.define("users", {
   },
 });
 
-// sync user model with database
+// sync employee model with database
 (async () => {
   try {
-    await User.sync();
-    console.log("Users table created successfully");
+    await Employee.sync();
+    console.log("Employee table created successfully");
   } catch (err) {
-    console.error("Error syncing Users table:", err);
+    console.error("Error syncing Employee table:", err);
   }
 })();
 
-module.exports.NationalIdPattern = /(?<!\d)\d{16}(?!\d)/;
-module.exports.PhoneRegex = /(?<!\d)\d{10}(?!\d)/
+module.exports = Employee;
 
-module.exports = User;
-module.exports.validateUser = (body, isUpdating = false) => {
+module.exports.validateEmployee = (body) => {
   return Joi.object({
     first_name: Joi.string().required(),
     last_name: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().pattern(this.PhoneRegex).required(), // validate phone
-    password: isUpdating ? Joi.string().min(6) : Joi.string().min(6).required(),
-    nationalId: Joi.string().pattern(this.NationalIdPattern).length(16).required(),
-  }).validate(body);
-};
-
-module.exports.validateUserLogin = (body) => {
-  return Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().required()
+    phone: Joi.string().pattern(PhoneRegex).required(), // validate phone
+    department: Joi.string().required(),
+    position: Joi.string().required(),
+    nationalId: Joi.string().pattern(NationalIdPattern).length(16).required(),
   }).validate(body);
 };
