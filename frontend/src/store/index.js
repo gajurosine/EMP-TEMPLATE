@@ -1,14 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './modules/authSlice';
-import carOwnerReducer from './modules/carOwnerSlice';
-import vehicleReducer from './modules/vehicleSlice';
-import vehicleCarOwnerReducer from './modules/vehicleCarOwnerSlice';
+import employeeReducer from './modules/employeeSlice';
+import laptopReducer from './modules/laptopSlice';
+import laptopEmployeeReducer from './modules/laptopEmployeeSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    carOwner: carOwnerReducer,
-    vehicle: vehicleReducer,
-    vehicleCarOwner: vehicleCarOwnerReducer,
+    employee: employeeReducer,
+    laptop: laptopReducer,
+    laptopEmployee: laptopEmployeeReducer,
   },
 })

@@ -5,34 +5,34 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 /**
  * @swagger
  * definitions:
- *   VehicleCarOwner:
+ *   LaptopEmployee:
  *     properties:
  *       _id:
  *         type: string
- *       carOwner:
+ *       employee:
  *         type: string
- *       vehicle:
+ *       laptop:
  *         type: string
- *       vehiclePlateNumber:
+ *       laptopPlateNumber:
  *         type: string
  *     required:
- *       - carOwner
- *       - vehicle
- *       - vehiclePlateNumber
+ *       - employee
+ *       - laptop
+ *       - laptopPlateNumber
  */
 
 var schema = mongoose.Schema({
-  carOwner: {
+  employee: {
     type: String,
     required: true,
-    ref: "carOwner"
+    ref: "employee"
   },
-  vehicle: {
+  laptop: {
     type: String,
     required: true,
-    ref: "vehicle"
+    ref: "laptop"
   },
-  vehiclePlateNumber: {
+  laptopPlateNumber: {
     type: String,
     unique: true,
     required: true,
@@ -42,13 +42,13 @@ var schema = mongoose.Schema({
 });
 schema.plugin(mongoosePaginate);
 
-const Model = mongoose.model("vehicleOwner", schema);
+const Model = mongoose.model("laptopOwner", schema);
 
-module.exports.VehicleCarOwner = Model;
-module.exports.validateVehicleCarOwner = (body) => {
+module.exports.LaptopEmployee = Model;
+module.exports.validateLaptopEmployee = (body) => {
   return Joi.object({
-    carOwner: Joi.string().required(),
-    vehicle: Joi.string().required(),
-    vehiclePlateNumber: Joi.string().required()
+    employee: Joi.string().required(),
+    laptop: Joi.string().required(),
+    laptopPlateNumber: Joi.string().required()
   }).validate(body);
 };

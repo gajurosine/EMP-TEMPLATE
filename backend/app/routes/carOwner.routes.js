@@ -1,9 +1,9 @@
 const {
-  getAllCarOwners,
-  createCarOwner,
-  updateCarOwner,
-  deleteCarOwner
-} = require("../controllers/carOwner.controller");
+  getAllEmployees,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee
+} = require("../controllers/employee.controller");
 const {
   auth
 } = require("../middlewares/auth.middleware");
@@ -16,11 +16,11 @@ module.exports = (app) => {
   router.route("/")
     /**
      * @swagger
-     * /carOwners:
+     * /employees:
      *   get:
      *     tags:
-     *       - CarOwner
-     *     description: Returns all CarOwners
+     *       - Employee
+     *     description: Returns all Employees
      *     security:
      *       - bearerAuth: -[]
      *     parameters:
@@ -44,23 +44,23 @@ module.exports = (app) => {
      *       500:
      *         description: Internal Server Error
      */
-    .get([auth, getAllCarOwners])
+    .get([auth, getAllEmployees])
     /**
      * @swagger
-     * /carOwners:
+     * /employees:
      *   post:
      *     tags:
-     *       - CarOwner
-     *     description: Create a carOwner
+     *       - Employee
+     *     description: Create a employee
      *     security:
      *       - bearerAuth: -[]
      *     parameters:
      *       - name: body
-     *         description: Fields for a carOwner
+     *         description: Fields for a employee
      *         in: body
      *         required: true
      *         schema:
-     *           $ref: '#/definitions/CarOwner'
+     *           $ref: '#/definitions/Employee'
      *     responses:
      *       200:
      *         description: OK
@@ -73,31 +73,31 @@ module.exports = (app) => {
      *       500:
      *         description: Internal Server Error
      */
-    .post([auth, createCarOwner]);
+    .post([auth, createEmployee]);
 
   // Create a new User
   router.route("/:id")
     /**
      * @swagger
-     * /carOwners/{id}:
+     * /employees/{id}:
      *   put:
      *     tags:
-     *       - CarOwner
-     *     description: Create a carOwner
+     *       - Employee
+     *     description: Create a employee
      *     security:
      *       - bearerAuth: -[]
      *     parameters:
      *       - name: id
-     *         description: carOwner id
+     *         description: employee id
      *         in: path
      *         type: string
      *         required: true
      *       - name: body
-     *         description: Fields for a carOwner
+     *         description: Fields for a employee
      *         in: body
      *         required: true
      *         schema:
-     *           $ref: '#/definitions/CarOwner'
+     *           $ref: '#/definitions/Employee'
      *     responses:
      *       200:
      *         description: OK
@@ -110,19 +110,19 @@ module.exports = (app) => {
      *       500:
      *         description: Internal Server Error
      */
-    .put([auth, updateCarOwner])
+    .put([auth, updateEmployee])
     /**
      * @swagger
-     * /carOwners/{id}:
+     * /employees/{id}:
      *   delete:
      *     tags:
-     *       - CarOwner
-     *     description: Delete CarOwner
+     *       - Employee
+     *     description: Delete Employee
      *     security:
      *       - bearerAuth: -[]
      *     parameters:
      *       - name: id
-     *         description: carOwner id
+     *         description: employee id
      *         in: path
      *         type: string
      *         required: true
@@ -138,7 +138,7 @@ module.exports = (app) => {
      *       500:
      *         description: Internal Server Error
      */
-    .delete([auth, deleteCarOwner]);
+    .delete([auth, deleteEmployee]);
 
-  app.use("/api/carOwners", router);
+  app.use("/api/employees", router);
 };

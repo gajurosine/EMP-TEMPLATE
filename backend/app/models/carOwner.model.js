@@ -6,7 +6,7 @@ const { NationalIdPattern, PhoneRegex } = require("./user.model");
 /**
  * @swagger
  * definitions:
- *   CarOwner:
+ *   Employee:
  *     properties:
  *       _id:
  *         type: string
@@ -49,10 +49,10 @@ var schema = mongoose.Schema({
 });
 schema.plugin(mongoosePaginate);
 
-const Model = mongoose.model("carOwner", schema);
+const Model = mongoose.model("employee", schema);
 
-module.exports.CarOwner = Model;
-module.exports.validateCarOwner = (body) => {
+module.exports.Employee = Model;
+module.exports.validateEmployee = (body) => {
   return Joi.object({
     names: Joi.string().required(),
     phone: Joi.string().pattern(PhoneRegex).required(), // validate phone

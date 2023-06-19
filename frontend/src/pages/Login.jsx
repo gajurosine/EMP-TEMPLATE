@@ -112,8 +112,8 @@ function Login() {
         <form className="text-center" onSubmit={handleLogin}>
           <img src={logo} className="mb-2 h-1/6 mx-auto" alt="" />
           <div className="title mb-8">
-            Welcome to RRA <br />
-            <div className="small">Vehicle Tracking Management System</div>
+            Welcome to EDS <br />
+            <div className="small">Laptop Tracking Management System</div>
           </div>
           <div className="input-container  mb-8">
             <input
@@ -166,7 +166,7 @@ function Login() {
                           htmlFor="first-name"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Names`
+                          Names
                         </label>
                         <input
                           onChange={(e) => {

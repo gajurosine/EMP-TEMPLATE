@@ -12,9 +12,9 @@ const host = process.env.HOST || "localhost";
 const swaggerOptions = {
   swaggerDefinition: {
       info: {
-          title: "Vehicle Tracking Management System API Documentation",
+          title: "Equipment Distribution System API Documentation",
           version: "1.0.0",
-          description: "Explore the Vehicle Tracking Management System",
+          description: "Equipment Distribution System by Mr. Bill",
       },
       schemes: [process.env.NODE_ENV === "production" ? "https" : "http"],
       host: host+":"+PORT,
@@ -39,7 +39,7 @@ app.get("/swagger.json", function (req, res) {
   res.send(swaggerDocs);
 });
 
-app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerDocs, false, { docExpansion: "none" }));
+app.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocs, false, { docExpansion: "none" }));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

@@ -5,7 +5,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 /**
  * @swagger
  * definitions:
- *   Vehicle:
+ *   Laptop:
  *     properties:
  *       _id:
  *         type: string
@@ -53,14 +53,14 @@ var schema = mongoose.Schema({
 });
 schema.plugin(mongoosePaginate);
 
-const Model = mongoose.model("vehicle", schema);
+const Model = mongoose.model("laptop", schema);
 
-module.exports.Vehicle = Model;
-module.exports.validateVehicle = (body) => {
+module.exports.Laptop = Model;
+module.exports.validateLaptop = (body) => {
   return Joi.object({
     chasisNumber: Joi.string().required(),
     manufactureCompany: Joi.string().required(),
-    manufactureYear: Joi.number().min(0).max(parseInt(new Date().getFullYear()+1)).required(),
+    manufactureYear: Joi.number().min(0).max(parseInt(new Date().getFullYear() + 1)).required(),
     price: Joi.number().min(0).required(),
     modelName: Joi.string().required(),
   }).validate(body);

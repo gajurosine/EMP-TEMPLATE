@@ -1,9 +1,9 @@
 const {
-  getAllVehicleCarOwners,
-  createVehicleCarOwner,
-  updateVehicleCarOwner,
-  deleteVehicleCarOwner
-} = require("../controllers/vehicleCarOwner.controller");
+  getAllLaptopEmployees,
+  createLaptopEmployee,
+  updateLaptopEmployee,
+  deleteLaptopEmployee
+} = require("../controllers/laptopEmployee.controller");
 const {
   auth
 } = require("../middlewares/auth.middleware");
@@ -16,11 +16,11 @@ module.exports = (app) => {
   router.route("/")
     /**
      * @swagger
-     * /vehicleCarOwners:
+     * /laptopEmployees:
      *   get:
      *     tags:
-     *       - VehicleCarOwner
-     *     description: Returns all VehicleCarOwners
+     *       - LaptopEmployee
+     *     description: Returns all LaptopEmployees
      *     security:
      *       - bearerAuth: -[]
      *     parameters:
@@ -44,23 +44,23 @@ module.exports = (app) => {
      *       500:
      *         description: Internal Server Error
      */
-    .get([auth, getAllVehicleCarOwners])
+    .get([auth, getAllLaptopEmployees])
     /**
      * @swagger
-     * /vehicleCarOwners:
+     * /laptopEmployees:
      *   post:
      *     tags:
-     *       - VehicleCarOwner
-     *     description: Create a vehicleCarOwner
+     *       - LaptopEmployee
+     *     description: Create a laptopEmployee
      *     security:
      *       - bearerAuth: -[]
      *     parameters:
      *       - name: body
-     *         description: Fields for a vehicleCarOwner
+     *         description: Fields for a laptopEmployee
      *         in: body
      *         required: true
      *         schema:
-     *           $ref: '#/definitions/VehicleCarOwner'
+     *           $ref: '#/definitions/LaptopEmployee'
      *     responses:
      *       200:
      *         description: OK
@@ -73,31 +73,31 @@ module.exports = (app) => {
      *       500:
      *         description: Internal Server Error
      */
-    .post([auth, createVehicleCarOwner]);
+    .post([auth, createLaptopEmployee]);
 
   // Create a new User
   router.route("/:id")
     /**
      * @swagger
-     * /vehicleCarOwners/{id}:
+     * /laptopEmployees/{id}:
      *   put:
      *     tags:
-     *       - VehicleCarOwner
-     *     description: Create a ehicleCarOwner
+     *       - LaptopEmployee
+     *     description: Create a ehicleEmployee
      *     security:
      *       - bearerAuth: -[]
      *     parameters:
      *       - name: id
-     *         description: vehicleCarOwner id
+     *         description: laptopEmployee id
      *         in: path
      *         type: string
      *         required: true
      *       - name: body
-     *         description: Fields for a vehicleCarOwner
+     *         description: Fields for a laptopEmployee
      *         in: body
      *         required: true
      *         schema:
-     *           $ref: '#/definitions/VehicleCarOwner'
+     *           $ref: '#/definitions/LaptopEmployee'
      *     responses:
      *       200:
      *         description: OK
@@ -110,19 +110,19 @@ module.exports = (app) => {
      *       500:
      *         description: Internal Server Error
      */
-    .put([auth, updateVehicleCarOwner])
+    .put([auth, updateLaptopEmployee])
     /**
      * @swagger
-     * /vehicleCarOwners/{id}:
+     * /laptopEmployees/{id}:
      *   delete:
      *     tags:
-     *       - VehicleCarOwner
-     *     description: Delete vehicleCarOwner
+     *       - LaptopEmployee
+     *     description: Delete laptopEmployee
      *     security:
      *       - bearerAuth: -[]
      *     parameters:
      *       - name: id
-     *         description: vehicleCarOwner id
+     *         description: laptopEmployee id
      *         in: path
      *         type: string
      *         required: true
@@ -138,7 +138,7 @@ module.exports = (app) => {
      *       500:
      *         description: Internal Server Error
      */
-    .delete([auth, deleteVehicleCarOwner]);
+    .delete([auth, deleteLaptopEmployee]);
 
-  app.use("/api/vehicleCarOwners", router);
+  app.use("/api/laptopEmployees", router);
 };

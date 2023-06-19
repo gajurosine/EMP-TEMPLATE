@@ -1,13 +1,13 @@
 const {
-    CarOwner
-} = require("../models/carOwner.model");
+    Employee
+} = require("../models/employee.model");
 const {
-    Vehicle
-} = require("../models/vehicle.model");
+    Laptop
+} = require("../models/laptop.model");
 const {
-    validateVehicleCarOwner,
-    VehicleCarOwner
-} = require("../models/vehicleOwner.model");
+    validateLaptopEmployee,
+    LaptopEmployee
+} = require("../models/laptopOwner.model");
 const {
     validateObjectId
 } = require("../utils/imports");
@@ -15,11 +15,11 @@ const {
 const { isValid } = require("rwandan-plate-number");
 
 /***
- * Get all vehicleCarOwners
+ * Get all laptopEmployees
  * @param req
  * @param res
  */
-exports.getAllVehicleCarOwners = async (req, res) => {
+exports.getAllLaptopEmployees = async (req, res) => {
     try {
         let {
             limit,
@@ -33,10 +33,10 @@ exports.getAllVehicleCarOwners = async (req, res) => {
         const options = {
             page: page,
             limit: limit,
-            populate: ['vehicle', 'carOwner']
+            populate: ['laptop', 'employee']
         };
 
-        const data = await VehicleCarOwner.paginate({}, options)
+        const data = await LaptopEmployee.paginate({}, options)
 
         res.send({
             data
@@ -49,64 +49,64 @@ exports.getAllVehicleCarOwners = async (req, res) => {
 
 
 /***
- *  Create's a new vehicle
+ *  Create's a new laptop
  * @param req
  * @param res
  */
-exports.createVehicleCarOwner = async (req, res) => {
+exports.createLaptopEmployee = async (req, res) => {
     try {
         const {
             error
-        } = validateVehicleCarOwner(req.body);
+        } = validateLaptopEmployee(req.body);
         if (error) return res.status(400).send({
             message: error.details[0].message
         });
 
-        if (!isValid(req.body.vehiclePlateNumber))
+        if (!isValid(req.body.laptopPlateNumber))
             return res.status(400).send({
                 message: 'Invalid Plate Number'
             });
 
-        if (!validateObjectId(req.body.vehicle))
+        if (!validateObjectId(req.body.laptop))
             return res.status(400).send({
-                message: 'Invalid vehicle id'
+                message: 'Invalid laptop id'
             });
 
-        if (!validateObjectId(req.body.carOwner))
+        if (!validateObjectId(req.body.employee))
             return res.status(400).send({
-                message: 'Invalid carOwner id'
+                message: 'Invalid employee id'
             });
 
-        const vehicle = await Vehicle.findById(req.body.vehicle);
+        const laptop = await Laptop.findById(req.body.laptop);
 
-        if (!vehicle)
+        if (!laptop)
             return res.status(404).send({
-                message: 'Vehicle Not found'
+                message: 'Laptop Not found'
             });
 
-        const carOwner = await CarOwner.findById(req.body.carOwner);
+        const employee = await Employee.findById(req.body.employee);
 
-        if (!carOwner)
+        if (!employee)
             return res.status(404).send({
-                message: 'CarOwner Not found'
+                message: 'Employee Not found'
             });
 
-        const isDupplicate = await VehicleCarOwner.findOne({
-            vehiclePlateNumber: req.body.vehiclePlateNumber
+        const isDupplicate = await LaptopEmployee.findOne({
+            laptopPlateNumber: req.body.laptopPlateNumber
         });
 
         if (isDupplicate)
             return res.status(404).send({
-                message: 'VehiclePlateNumber is already used'
+                message: 'LaptopPlateNumber is already used'
             });
 
-        const newVehicleCarOwner = new VehicleCarOwner(req.body);
+        const newLaptopEmployee = new LaptopEmployee(req.body);
 
-        const result = await newVehicleCarOwner.save();
+        const result = await newLaptopEmployee.save();
 
         return res.status(201).send({
             message: 'CREATED',
-            data: {...result._doc,carOwner,vehicle}
+            data: { ...result._doc, employee, laptop }
         });
     } catch (e) {
         return res.status(500).send(e.toString().split('\"').join(''))
@@ -114,11 +114,11 @@ exports.createVehicleCarOwner = async (req, res) => {
 }
 
 /***
- *  updates's a new vehicle
+ *  updates's a new laptop
  * @param req
  * @param res
  */
-exports.updateVehicleCarOwner = async (req, res) => {
+exports.updateLaptopEmployee = async (req, res) => {
     try {
 
         if (!validateObjectId(req.params.id))
@@ -128,65 +128,65 @@ exports.updateVehicleCarOwner = async (req, res) => {
 
         const {
             error
-        } = validateVehicleCarOwner(req.body);
+        } = validateLaptopEmployee(req.body);
         if (error) return res.status(400).send({
             message: error.details[0].message
         });
 
-        if (!isValid(req.body.vehiclePlateNumber))
+        if (!isValid(req.body.laptopPlateNumber))
             return res.status(400).send({
                 message: 'Invalid Plate Number'
             });
 
-        if (!validateObjectId(req.body.vehicle))
+        if (!validateObjectId(req.body.laptop))
             return res.status(400).send({
-                message: 'Invalid vehicle id'
+                message: 'Invalid laptop id'
             });
 
-        if (!validateObjectId(req.body.carOwner))
+        if (!validateObjectId(req.body.employee))
             return res.status(400).send({
-                message: 'Invalid carOwner id'
+                message: 'Invalid employee id'
             });
 
-        const vehicle = await Vehicle.findById(req.body.vehicle);
+        const laptop = await Laptop.findById(req.body.laptop);
 
-        if (!vehicle)
+        if (!laptop)
             return res.status(404).send({
-                message: 'Vehicle Not found'
+                message: 'Laptop Not found'
             });
 
-        const carOwner = await CarOwner.findById(req.body.carOwner);
+        const employee = await Employee.findById(req.body.employee);
 
-        if (!carOwner)
+        if (!employee)
             return res.status(404).send({
-                message: 'CarOwner Not found'
+                message: 'Employee Not found'
             });
 
-        const isDupplicate = await VehicleCarOwner.findOne({
+        const isDupplicate = await LaptopEmployee.findOne({
             _id: {
                 $ne: req.params.id
             },
-            vehiclePlateNumber: req.body.vehiclePlateNumber
+            laptopPlateNumber: req.body.laptopPlateNumber
         });
 
         if (isDupplicate)
             return res.status(404).send({
-                message: 'VehiclePlateNumber is already used'
+                message: 'LaptopPlateNumber is already used'
             });
 
-        const result = await VehicleCarOwner.findOneAndUpdate({
+        const result = await LaptopEmployee.findOneAndUpdate({
             _id: req.params.id
         }, req.body, {
             new: true
         });
         if (!result)
             return res.status(404).send({
-                message: 'VehicleCarOwner Not found'
+                message: 'LaptopEmployee Not found'
             });
 
         return res.status(200).send({
             message: 'UPDATED',
-            data: {...result,carOwner,vehicle}
+            data: { ...result, employee, laptop }
         });
     } catch (e) {
         return res.status(500).send(e.toString().split('\"').join(''))
@@ -194,11 +194,11 @@ exports.updateVehicleCarOwner = async (req, res) => {
 }
 
 /***
- *  updates's a new vehicle
+ *  updates's a new laptop
  * @param req
  * @param res
  */
-exports.deleteVehicleCarOwner = async (req, res) => {
+exports.deleteLaptopEmployee = async (req, res) => {
     try {
 
         if (!validateObjectId(req.params.id))
@@ -206,12 +206,12 @@ exports.deleteVehicleCarOwner = async (req, res) => {
                 message: 'Invalid id'
             });
 
-        const result = await VehicleCarOwner.findOneAndDelete({
+        const result = await LaptopEmployee.findOneAndDelete({
             _id: req.params.id
         });
         if (!result)
             return res.status(404).send({
-                message: 'vehicleCarOwner not found'
+                message: 'laptopEmployee not found'
             });
 
         return res.send({

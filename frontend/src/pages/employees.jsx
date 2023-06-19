@@ -6,41 +6,25 @@ import { selectIsLoggedIn } from "../store/modules/authSlice";
 import AppServices from "../services";
 import toast from "react-hot-toast";
 import {
-  selectLaptopEmployees,
-  setLaptopEmployees,
-  addLaptopEmployee,
-  updateLaptopEmployee,
-  removeLaptopEmployee,
-} from "../store/modules/laptopEmployeeSlice";
+  selectEmployees,
+  setEmployees,
+  addEmployee,
+  updateEmployee,
+  removeEmployee,
+} from "../store/modules/employeeSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectEmployees, setEmployees } from "../store/modules/employeeSlice";
-import { selectLaptops, setLaptops } from "../store/modules/laptopSlice";
 
-function LaptopEmployees() {
+function Employees() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
-  const laptopEmployees = useSelector(selectLaptopEmployees);
   const employees = useSelector(selectEmployees);
-  const laptops = useSelector(selectLaptops);
   const dispatch = useDispatch();
   const [filter, setFilter] = useState({});
 
   useEffect(() => {
     if (isLoggedIn) {
-      AppServices.getLaptopEmployees().then((response) => {
-        if (response.data.data) {
-          dispatch(setLaptopEmployees(response.data.data));
-        }
-      });
-
       AppServices.getEmployees().then((response) => {
         if (response.data.data) {
           dispatch(setEmployees(response.data.data));
-        }
-      });
-
-      AppServices.getLaptops().then((response) => {
-        if (response.data.data) {
-          dispatch(setLaptops(response.data.data));
         }
       });
     }
@@ -52,56 +36,49 @@ function LaptopEmployees() {
     if (childRef.current) childRef.current.toggleModal();
   };
 
-  const [selectedLaptopEmployee, setSelectedLaptopEmployee] = useState({});
-  const [selectedLaptopEmployeeId, setSelectedLaptopEmployeeId] = useState("");
+  const [selectedEmployee, setSelectedEmployee] = useState({});
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const isUpdating = selectedLaptopEmployeeId !== "";
+    const isUpdating = selectedEmployeeId !== "";
 
     toast.promise(
       isDeleting
-        ? AppServices.deleteLaptopEmployee(selectedLaptopEmployeeId)
+        ? AppServices.deleteEmployee(selectedEmployeeId)
         : isUpdating
-        ? AppServices.updateLaptopEmployee(
-            selectedLaptopEmployee,
-            selectedLaptopEmployeeId
-          )
-        : AppServices.registerLaptopEmployee(selectedLaptopEmployee),
+        ? AppServices.updateEmployee(selectedEmployee, selectedEmployeeId)
+        : AppServices.registerEmployee(selectedEmployee),
       {
         loading: `${
           isDeleting ? "Deleting" : isUpdating ? "Updating" : "Creating"
-        } laptopEmployee ...`,
+        } employee ...`,
         success: (response) => {
-          if (isDeleting)
-            dispatch(removeLaptopEmployee(selectedLaptopEmployeeId));
+          if (isDeleting) dispatch(removeEmployee(selectedEmployeeId));
           else if (isUpdating)
             dispatch(
-              updateLaptopEmployee({
-                ...response.data.data,
-                ...selectedLaptopEmployee,
-              })
+              updateEmployee({ ...response.data.data, ...selectedEmployee })
             );
-          else dispatch(addLaptopEmployee(response.data.data));
+          else dispatch(addEmployee(response.data.data));
 
-          if (selectedLaptopEmployee.password?.length) {
-            AppServices.updateLaptopEmployeePassword(
+          if (selectedEmployee.password?.length) {
+            AppServices.updateEmployeePassword(
               {
-                newPassword: selectedLaptopEmployee.password,
-                confirmPassword: selectedLaptopEmployee.password,
+                newPassword: selectedEmployee.password,
+                confirmPassword: selectedEmployee.password,
               },
-              selectedLaptopEmployeeId
+              selectedEmployeeId
             );
           }
 
           let message = `${
             isDeleting ? "Deleted" : isUpdating ? "Updated" : "Created"
-          } laptopEmployee successfully`;
-          if (isUpdating) setSelectedLaptopEmployeeId("");
+          } employee successfully`;
+          if (isUpdating) setSelectedEmployeeId("");
           if (isDeleting) setIsDeleting(false);
-          setSelectedLaptopEmployee({});
+          setSelectedEmployee({});
           toggleModal();
           return message;
         },
@@ -113,9 +90,8 @@ function LaptopEmployees() {
             error.message ||
             error.toString();
           if (message.includes("required pattern"))
-            if (message.includes("chasisNumber"))
-              return "invalid chasisNumber number";
-            else return "invalid manufactureCompany";
+            if (message.includes("phone")) return "invalid phone number";
+            else return "invalid nationalId";
           return message;
         },
       }
@@ -125,7 +101,7 @@ function LaptopEmployees() {
   return (
     <div className="pl-10 pt-10">
       <div>
-        <div className="title">History of Laptop Ownership</div>
+        <div className="title">Employee</div>
         <div className="md:flex">
           <div className="w-full">
             <div className="md:flex">
@@ -145,7 +121,7 @@ function LaptopEmployees() {
                       />
                     </svg>
                   </div>
-                  <div className="mt-1">Create a new laptop-employee</div>
+                  <div className="mt-1">Create a new employee</div>
                 </button>
               </div>
               <div className="flex ml-auto mr-6">
@@ -175,16 +151,15 @@ function LaptopEmployees() {
               mb-2 mb-0
             "
                   >
-                    <th>User Names</th>
-                    <th>Laptop Model</th>
-                    <th>Price(RWF)</th>
-                    <th>Plate Number</th>
-                    <th>Date Assigned</th>
+                    <th>Names</th>
+                    <th>Phone number</th>
+                    <th>Address</th>
+                    <th>National Id</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody className="sm:flex-1 sm:flex-none">
-                  {laptopEmployees.map((doc) => (
+                  {employees.map((doc) => (
                     <tr
                       key={doc._id}
                       className="
@@ -202,32 +177,28 @@ function LaptopEmployees() {
                       <td className="pt-1 p-3">
                         <div className="flex">
                           <div></div>
-                          <div>{doc?.employee.names}</div>
+                          <div>{doc?.names}</div>
                         </div>
                       </td>
                       <td className="pt-1 p-3">
                         {" "}
-                        <div className="">{doc?.laptop.modelName}</div>
+                        <div className="">{doc?.phone}</div>
                       </td>
-                      <td className="pt-1 p-3">{doc?.laptop.price}</td>
-                      <td className="pt-1 p-3">{doc?.laptopPlateNumber}</td>
                       <td className="pt-1 p-3">
-                        {((date) => {
-                          return `${date.getDate()}/${
-                            date.getMonth() + 1
-                          }/${date.getFullYear()}`;
-                        })(new Date(doc?.createdAt))}
+                        <div className="">{doc?.address}</div>
                       </td>
+                      <td className="pt-1 p-3">{doc?.nationalId}</td>
                       <td className="pt-1 p-3">
                         <div className="flex">
                           <div
                             onClick={() => {
-                              setSelectedLaptopEmployee({
-                                employee: doc.employee._id,
-                                laptop: doc.laptop._id,
-                                laptopPlateNumber: doc.laptopPlateNumber,
+                              setSelectedEmployee({
+                                names: doc.names,
+                                address: doc.address,
+                                phone: doc.phone,
+                                nationalId: doc.nationalId,
                               });
-                              setSelectedLaptopEmployeeId(doc._id);
+                              setSelectedEmployeeId(doc._id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded mr-2"
@@ -237,7 +208,7 @@ function LaptopEmployees() {
                           <div
                             onClick={() => {
                               setIsDeleting(true);
-                              setSelectedLaptopEmployeeId(doc._id);
+                              setSelectedEmployeeId(doc._id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded"
@@ -258,7 +229,7 @@ function LaptopEmployees() {
         {isDeleting ? (
           <div>
             <div className="modal-title text-center my-10">
-              Are you sure you want to delete the selected laptopEmployee ?
+              Are you sure you want to delete the selected employee ?
             </div>
             <div className="modal-footer my-10">
               <div className="flex justify-center">
@@ -272,9 +243,9 @@ function LaptopEmployees() {
         ) : (
           <div>
             <div className="modal-title text-center my-10">
-              {selectedLaptopEmployeeId !== ""
-                ? "Update laptopEmployee"
-                : "Create laptopEmployee"}
+              {selectedEmployeeId !== ""
+                ? "Update employee"
+                : "Create employee"}
             </div>
             <div className="modal-body">
               <form>
@@ -283,74 +254,86 @@ function LaptopEmployees() {
                     <div className="grid grid-cols-6 gap-6">
                       <div className="col-span-6 sm:col-span-3">
                         <label
-                          htmlFor="department"
+                          htmlFor="first-name"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Car owner
+                          Names
                         </label>
-                        <select
-                          defaultValue={selectedLaptopEmployee?.employee}
+                        <input
+                          defaultValue={selectedEmployee?.names}
                           onChange={(e) => {
-                            setSelectedLaptopEmployee({
-                              ...selectedLaptopEmployee,
-                              employee: e.target.value,
+                            setSelectedEmployee({
+                              ...selectedEmployee,
+                              names: e.target.value,
                             });
                           }}
+                          type="text"
                           id="first-name"
-                          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option value="">Select employee</option>
-                          {employees.map((el) => (
-                            <option key={el._id} value={el._id}>
-                              {el.names}
-                            </option>
-                          ))}
-                        </select>
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
                       </div>
+
                       <div className="col-span-6 sm:col-span-3">
                         <label
-                          htmlFor="department"
+                          htmlFor="last-name"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Laptop
+                          Address
                         </label>
-                        <select
-                          defaultValue={selectedLaptopEmployee?.employee}
+                        <input
+                          defaultValue={selectedEmployee?.address}
                           onChange={(e) => {
-                            setSelectedLaptopEmployee({
-                              ...selectedLaptopEmployee,
-                              laptop: e.target.value,
+                            setSelectedEmployee({
+                              ...selectedEmployee,
+                              address: e.target.value,
                             });
                           }}
-                          id="first-name"
-                          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          type="text"
+                          id="last-name"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="email-address"
+                          className="block text-sm font-medium text-gray-700"
                         >
-                          <option value="">Select laptop</option>
-                          {laptops.map((el) => (
-                            <option key={el._id} value={el._id}>
-                              {el.modelName}
-                            </option>
-                          ))}
-                        </select>
+                          Phone
+                        </label>
+                        <input
+                          defaultValue={selectedEmployee?.phone}
+                          onChange={(e) => {
+                            setSelectedEmployee({
+                              ...selectedEmployee,
+                              phone: e.target.value,
+                            });
+                          }}
+                          type="number"
+                          maxLength={10}
+                          minLength={10}
+                          id="email-address"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <label
                           htmlFor="password"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Laptop Serial Number
+                          NationalId
                         </label>
                         <input
-                          defaultValue={
-                            selectedLaptopEmployee?.laptopPlateNumber
-                          }
+                          defaultValue={selectedEmployee?.nationalId}
                           onChange={(e) => {
-                            setSelectedLaptopEmployee({
-                              ...selectedLaptopEmployee,
-                              laptopPlateNumber: e.target.value,
+                            setSelectedEmployee({
+                              ...selectedEmployee,
+                              nationalId: e.target.value,
                             });
                           }}
-                          type="text"
+                          type="number"
+                          maxLength={16}
+                          minLength={16}
                           id="password"
                           className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         />
@@ -375,4 +358,4 @@ function LaptopEmployees() {
   );
 }
 
-export default LaptopEmployees;
+export default Employees;

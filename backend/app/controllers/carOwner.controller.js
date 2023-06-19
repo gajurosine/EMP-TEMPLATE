@@ -1,16 +1,16 @@
 const {
-    validateCarOwner,
-    CarOwner
-} = require("../models/carOwner.model");
-const { VehicleCarOwner } = require("../models/vehicleOwner.model");
+    validateEmployee,
+    Employee
+} = require("../models/employee.model");
+const { LaptopEmployee } = require("../models/laptopOwner.model");
 const { validateObjectId } = require("../utils/imports");
 
 /***
- * Get all carOwners
+ * Get all employees
  * @param req
  * @param res
  */
-exports.getAllCarOwners = async (req, res) => {
+exports.getAllEmployees = async (req, res) => {
     try {
         let {
             limit,
@@ -26,7 +26,7 @@ exports.getAllCarOwners = async (req, res) => {
             limit: limit
         };
 
-        const data = await CarOwner.paginate({}, options)
+        const data = await Employee.paginate({}, options)
 
         res.send({
             data
@@ -39,15 +39,15 @@ exports.getAllCarOwners = async (req, res) => {
 
 
 /***
- *  Create's a new carOwner
+ *  Create's a new employee
  * @param req
  * @param res
  */
-exports.createCarOwner = async (req, res) => {
+exports.createEmployee = async (req, res) => {
     try {
         const {
             error
-        } = validateCarOwner(req.body);
+        } = validateEmployee(req.body);
         if (error) return res.status(400).send({
             message: error.details[0].message
         });
@@ -57,7 +57,7 @@ exports.createCarOwner = async (req, res) => {
             phone
         } = req.body
 
-        let carOwner = await CarOwner.findOne({
+        let employee = await Employee.findOne({
             $or: [{
                 nationalId
             }, {
@@ -65,16 +65,16 @@ exports.createCarOwner = async (req, res) => {
             }],
         })
 
-        if (carOwner) {
-            const phoneFound = phone == carOwner.phone
+        if (employee) {
+            const phoneFound = phone == employee.phone
             return res.status(400).send({
-                message: `CarOwner with same ${phoneFound ? 'phone ' : 'nationalId '} arleady exist`
+                message: `Employee with same ${phoneFound ? 'phone ' : 'nationalId '} arleady exist`
             });
         }
 
-        const newCarOwner = new CarOwner(req.body);
+        const newEmployee = new Employee(req.body);
 
-        const result = await newCarOwner.save();
+        const result = await newEmployee.save();
 
         return res.status(201).send({
             message: 'CREATED',
@@ -86,11 +86,11 @@ exports.createCarOwner = async (req, res) => {
 }
 
 /***
- *  updates's a new carOwner
+ *  updates's a new employee
  * @param req
  * @param res
  */
-exports.updateCarOwner = async (req, res) => {
+exports.updateEmployee = async (req, res) => {
     try {
 
         if (!validateObjectId(req.params.id))
@@ -100,7 +100,7 @@ exports.updateCarOwner = async (req, res) => {
 
         const {
             error
-        } = validateCarOwner(req.body);
+        } = validateEmployee(req.body);
         if (error) return res.status(400).send({
             message: error.details[0].message
         });
@@ -110,7 +110,7 @@ exports.updateCarOwner = async (req, res) => {
             phone
         } = req.body
 
-        let dupplicate_carOwner = await CarOwner.findOne({
+        let dupplicate_employee = await Employee.findOne({
             _id: {
                 $ne: req.params.id
             },
@@ -121,14 +121,14 @@ exports.updateCarOwner = async (req, res) => {
             }],
         })
 
-        if (dupplicate_carOwner) {
-            const phoneFound = phone == dupplicate_carOwner.phone
+        if (dupplicate_employee) {
+            const phoneFound = phone == dupplicate_employee.phone
             return res.status(400).send({
-                message: `CarOwner with same ${phoneFound ? 'phone ' : 'nationalId '} arleady exist`
+                message: `Employee with same ${phoneFound ? 'phone ' : 'nationalId '} arleady exist`
             });
         }
 
-        const result = await CarOwner.findOneAndUpdate({
+        const result = await Employee.findOneAndUpdate({
             _id: req.params.id
         }, req.body, {
             new: true
@@ -136,7 +136,7 @@ exports.updateCarOwner = async (req, res) => {
 
         if (!result)
             return res.status(404).send({
-                message: 'CarOwner Not found'
+                message: 'Employee Not found'
             });
 
         return res.status(200).send({
@@ -149,11 +149,11 @@ exports.updateCarOwner = async (req, res) => {
 }
 
 /***
- *  updates's a new carOwner
+ *  updates's a new employee
  * @param req
  * @param res
  */
-exports.deleteCarOwner = async (req, res) => {
+exports.deleteEmployee = async (req, res) => {
     try {
 
         if (!validateObjectId(req.params.id))
@@ -161,16 +161,16 @@ exports.deleteCarOwner = async (req, res) => {
                 message: 'Invalid id'
             });
 
-        const result = await CarOwner.findOneAndDelete({
+        const result = await Employee.findOneAndDelete({
             _id: req.params.id
         });
         if (!result)
             return res.status(404).send({
-                message: 'CarOwner not found'
+                message: 'Employee not found'
             });
 
-        await VehicleCarOwner.deleteMany({
-            vehicle: req.params.id
+        await LaptopEmployee.deleteMany({
+            laptop: req.params.id
         });
 
         return res.send({

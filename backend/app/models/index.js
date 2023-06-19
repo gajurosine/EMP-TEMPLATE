@@ -1,10 +1,15 @@
 const dbConfig = require("../config/db.config.js");
 
-const mongoose = require("mongoose");
-mongoose.Promise = global.Promise;
+const { Sequelize } = require('sequelize');
+const sequelize = require('./config/db.config');
 
-const db = {};
-db.mongoose = mongoose;
-db.url = dbConfig.url;
+async function db() {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+}
 
 module.exports = db;

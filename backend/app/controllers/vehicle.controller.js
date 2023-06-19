@@ -1,20 +1,20 @@
 const {
-    validateVehicle,
-    Vehicle
-} = require("../models/vehicle.model");
+    validateLaptop,
+    Laptop
+} = require("../models/laptop.model");
 const {
-    VehicleCarOwner
-} = require("../models/vehicleOwner.model");
+    LaptopEmployee
+} = require("../models/laptopOwner.model");
 const {
     validateObjectId
 } = require("../utils/imports");
 
 /***
- * Get all vehicles
+ * Get all laptops
  * @param req
  * @param res
  */
-exports.getAllVehicles = async (req, res) => {
+exports.getAllLaptops = async (req, res) => {
     try {
         let {
             limit,
@@ -30,7 +30,7 @@ exports.getAllVehicles = async (req, res) => {
             limit: limit
         };
 
-        const data = await Vehicle.paginate({}, options)
+        const data = await Laptop.paginate({}, options)
 
         res.send({
             data
@@ -43,27 +43,27 @@ exports.getAllVehicles = async (req, res) => {
 
 
 /***
- *  Create's a new vehicle
+ *  Create's a new laptop
  * @param req
  * @param res
  */
-exports.createVehicle = async (req, res) => {
+exports.createLaptop = async (req, res) => {
     try {
         const {
             error
-        } = validateVehicle(req.body);
+        } = validateLaptop(req.body);
         if (error) return res.status(400).send({
             message: error.details[0].message
         });
 
-        const dupplicate = await Vehicle.findOne(req.body);
+        const dupplicate = await Laptop.findOne(req.body);
         if (dupplicate) return res.status(400).send({
-            message: 'Vehicle already exists'
+            message: 'Laptop already exists'
         });
 
-        const newVehicle = new Vehicle(req.body);
+        const newLaptop = new Laptop(req.body);
 
-        const result = await newVehicle.save();
+        const result = await newLaptop.save();
 
         return res.status(201).send({
             message: 'CREATED',
@@ -75,11 +75,11 @@ exports.createVehicle = async (req, res) => {
 }
 
 /***
- *  updates's a new vehicle
+ *  updates's a new laptop
  * @param req
  * @param res
  */
-exports.updateVehicle = async (req, res) => {
+exports.updateLaptop = async (req, res) => {
     try {
 
         if (!validateObjectId(req.params.id))
@@ -89,12 +89,12 @@ exports.updateVehicle = async (req, res) => {
 
         const {
             error
-        } = validateVehicle(req.body);
+        } = validateLaptop(req.body);
         if (error) return res.status(400).send({
             message: error.details[0].message
         });
 
-        const result = await Vehicle.findOneAndUpdate({
+        const result = await Laptop.findOneAndUpdate({
             _id: req.params.id
         }, req.body, {
             new: true
@@ -102,7 +102,7 @@ exports.updateVehicle = async (req, res) => {
 
         if (!result)
             return res.status(404).send({
-                message: 'Vehicle Not found'
+                message: 'Laptop Not found'
             });
 
         return res.status(200).send({
@@ -115,11 +115,11 @@ exports.updateVehicle = async (req, res) => {
 }
 
 /***
- *  updates's a new vehicle
+ *  updates's a new laptop
  * @param req
  * @param res
  */
-exports.deleteVehicle = async (req, res) => {
+exports.deleteLaptop = async (req, res) => {
     try {
 
         if (!validateObjectId(req.params.id))
@@ -127,16 +127,16 @@ exports.deleteVehicle = async (req, res) => {
                 message: 'Invalid id'
             });
 
-        const result = await Vehicle.findOneAndDelete({
+        const result = await Laptop.findOneAndDelete({
             _id: req.params.id
         });
         if (!result)
             return res.status(404).send({
-                message: 'Vehicle not found'
+                message: 'Laptop not found'
             });
 
-        await VehicleCarOwner.deleteMany({
-            vehicle: req.params.id
+        await LaptopEmployee.deleteMany({
+            laptop: req.params.id
         });
 
         return res.send({

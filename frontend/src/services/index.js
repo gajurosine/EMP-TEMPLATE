@@ -24,46 +24,46 @@ class AppServices {
     return axios.delete(`${API_URL}/users`);
   }
 
-  updateVehicle(body, id) {
-    return axios.put(`${API_URL}/vehicles/` + id, body);
+  updateLaptop(body, id) {
+    return axios.put(`${API_URL}/laptops/` + id, body);
   }
-  deleteVehicle(id) {
-    return axios.delete(`${API_URL}/vehicles/` + id);
-  }
-
-  registerVehicle(body) {
-    return axios.post(`${API_URL}/vehicles/`, body);
-  }
-  getVehicles(query = "page=1&limit=10") {
-    return axios.get(`${API_URL}/vehicles?${query}`);
+  deleteLaptop(id) {
+    return axios.delete(`${API_URL}/laptops/` + id);
   }
 
-  updateCarOwner(body, id) {
-    return axios.put(`${API_URL}/carOwners/` + id, body);
+  registerLaptop(body) {
+    return axios.post(`${API_URL}/laptops/`, body);
   }
-  deleteCarOwner(id) {
-    return axios.delete(`${API_URL}/carOwners/` + id);
-  }
-
-  registerCarOwner(body) {
-    return axios.post(`${API_URL}/carOwners/`, body);
-  }
-  getCarOwners(query = "page=1&limit=10") {
-    return axios.get(`${API_URL}/carOwners?${query}`);
+  getLaptops(query = "page=1&limit=10") {
+    return axios.get(`${API_URL}/laptops?${query}`);
   }
 
-  updateVehicleCarOwner(body, id) {
-    return axios.put(`${API_URL}/vehicleCarOwners/` + id, body);
+  updateEmployee(body, id) {
+    return axios.put(`${API_URL}/employees/` + id, body);
   }
-  deleteVehicleCarOwner(id) {
-    return axios.delete(`${API_URL}/vehicleCarOwners/` + id);
+  deleteEmployee(id) {
+    return axios.delete(`${API_URL}/employees/` + id);
   }
 
-  registerVehicleCarOwner(body) {
-    return axios.post(`${API_URL}/vehicleCarOwners/`, body);
+  registerEmployee(body) {
+    return axios.post(`${API_URL}/employees/`, body);
   }
-  getVehicleCarOwners(query = "page=1&limit=10") {
-    return axios.get(`${API_URL}/vehicleCarOwners?${query}`);
+  getEmployees(query = "page=1&limit=10") {
+    return axios.get(`${API_URL}/employees?${query}`);
+  }
+
+  updateLaptopEmployee(body, id) {
+    return axios.put(`${API_URL}/laptopEmployees/` + id, body);
+  }
+  deleteLaptopEmployee(id) {
+    return axios.delete(`${API_URL}/laptopEmployees/` + id);
+  }
+
+  registerLaptopEmployee(body) {
+    return axios.post(`${API_URL}/laptopEmployees/`, body);
+  }
+  getLaptopEmployees(query = "page=1&limit=10") {
+    return axios.get(`${API_URL}/laptopEmployees?${query}`);
   }
 }
 
