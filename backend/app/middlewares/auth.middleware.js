@@ -1,6 +1,6 @@
 // import dependencies
 const { verify } = require('jsonwebtoken');
-const { User } = require('../models/user.model');
+const User = require('../models/user.model');
 
 async function auth(req, res, next) {
     const header = req.header('authorization')
@@ -9,16 +9,15 @@ async function auth(req, res, next) {
         return res.status(401).send({message:'No Token Found'})
     try {
         const decoded = verify(token, process.env.JWT_SECRET)
-        const user = await User.findOne({
-            _id: decoded.id
-        })
+        const user = await User.findByPk(decoded.id);
         if (!user)
             return res.status(401).send({message:'Invalid Token'})
         req.user = user
-        next()
+        next();
     }
     catch (err) {
         res.status(401).send({message:"Unauthorized"})
+        console.log(err);
     }
 }
 module.exports.auth = auth

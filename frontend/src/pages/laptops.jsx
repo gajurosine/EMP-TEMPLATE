@@ -90,7 +90,7 @@ function Laptops() {
             error.message ||
             error.toString();
           if (message.includes("required pattern"))
-            if (message.includes("serialNumber"))
+            if (message.includes("laptopSerialNumber"))
               return "Invalid Serial Number";
             else return "Invalid Manufacture";
           return message;
@@ -161,7 +161,7 @@ function Laptops() {
                 <tbody className="sm:flex-1 sm:flex-none">
                   {laptops.map((doc) => (
                     <tr
-                      key={doc._id}
+                      key={doc.id}
                       className="
               sm:flex
               sm:flex-col
@@ -182,7 +182,7 @@ function Laptops() {
                       </td>
                       <td className="pt-1 p-3">
                         {" "}
-                        <div className="">{doc?.serialNumber}</div>
+                        <div className="">{doc?.laptopSerialNumber}</div>
                       </td>
                       <td className="pt-1 p-3">{doc?.manufactureCompany}</td>
                       <td className="pt-1 p-3">
@@ -191,10 +191,10 @@ function Laptops() {
                             onClick={() => {
                               setSelectedLaptop({
                                 modelName: doc.modelName,
-                                serialNumber: doc.serialNumber,
+                                laptopSerialNumber: doc.laptopSerialNumber,
                                 manufactureCompany: doc.manufactureCompany,
                               });
-                              setSelectedLaptopId(doc._id);
+                              setSelectedLaptopId(doc.id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded mr-2"
@@ -204,7 +204,7 @@ function Laptops() {
                           <div
                             onClick={() => {
                               setIsDeleting(true);
-                              setSelectedLaptopId(doc._id);
+                              setSelectedLaptopId(doc.id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded"
@@ -296,11 +296,11 @@ function Laptops() {
                           Serial Number
                         </label>
                         <input
-                          defaultValue={selectedLaptop?.serialNumber}
+                          defaultValue={selectedLaptop?.laptopSerialNumber}
                           onChange={(e) => {
                             setSelectedLaptop({
                               ...selectedLaptop,
-                              serialNumber: e.target.value,
+                              laptopSerialNumber: e.target.value,
                             });
                           }}
                           type="text"

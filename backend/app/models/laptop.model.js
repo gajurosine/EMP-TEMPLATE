@@ -7,21 +7,21 @@ const Joi = require('joi');
  * definitions:
  *   Laptop:
  *     properties:
- *       _id:
+ *       id:
  *         type: string
- *       serialNumber:
+ *       laptopSerialNumber:
  *         type: string
  *       manufactureCompany:
  *         type: string
  *       modelName:
  *         type: string
  *     required:
- *       - serialNumber
+ *       - laptopSerialNumber
  *       - manufactureCompany
  *       - modelName
  */
 
-var Laptop = sequelize.define("laptop", {
+const Laptop = sequelize.define("laptops", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -41,20 +41,17 @@ var Laptop = sequelize.define("laptop", {
     allowNull: false,
   },
   created_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
   },
   updated_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.literal(
-      "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-    ),
-    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    onUpdate: DataTypes.NOW,
   },
 });
 
-// sync laptop model with database
+// Sync laptop model with the database
 (async () => {
   try {
     await Laptop.sync();
@@ -66,10 +63,9 @@ var Laptop = sequelize.define("laptop", {
 
 module.exports = Laptop;
 
-module.exports = Laptop;
 module.exports.validateLaptop = (body) => {
   return Joi.object({
-    serialNumber: Joi.string().required(),
+    laptopSerialNumber: Joi.string().required(),
     manufactureCompany: Joi.string().required(),
     modelName: Joi.string().required(),
   }).validate(body);

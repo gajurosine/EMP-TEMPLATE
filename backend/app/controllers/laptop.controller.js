@@ -1,13 +1,7 @@
-const {
-    validateLaptop,
-    Laptop
-} = require("../models/laptop.model");
-const {
-    LaptopEmployee
-} = require("../models/employee.model");
-const {
-    validateObjectId
-} = require("../utils/imports");
+const { validateLaptop } = require("../models/laptop.model");
+const Laptop = require("../models/laptop.model");
+const { LaptopEmployee } = require("../models/laptopEmployee.model");
+const { validateObjectId } = require("../utils/imports");
 
 /***
  * Get all laptops
@@ -15,135 +9,89 @@ const {
  * @param res
  */
 exports.getAllLaptops = async (req, res) => {
-    try {
-        let {
-            limit,
-            page
-        } = req.query;
+  try {
+    let { limit, page } = req.query;
 
-        if (!page || page < 1) page = 1;
+    if (!page || page < 1) page = 1;
+    if (!limit) limit = 10;
 
-        if (!limit) limit = 10;
+    const options = {
+      offset: (page - 1) * limit,
+      limit: parseInt(limit),
+    };
 
-        const options = {
-            page: page,
-            limit: limit
-        };
+    const laptops = await Laptop.findAndCountAll(options);
 
-        const data = await Laptop.paginate({}, options)
-
-        res.send({
-            data
-        });
-    } catch (e) {
-        return res.status(500).send(e.toString().split('\"').join(''))
-    }
-}
-
-
+    res.send({ data: laptops });
+  } catch (e) {
+    return res.status(500).send(e.toString().split('\"').join(''));
+  }
+};
 
 /***
- *  Create's a new laptop
+ * Create a new laptop
  * @param req
  * @param res
  */
 exports.createLaptop = async (req, res) => {
-    try {
-        const {
-            error
-        } = validateLaptop(req.body);
-        if (error) return res.status(400).send({
-            message: error.details[0].message
-        });
+  try {
+    const { error } = validateLaptop(req.body);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
-        const dupplicate = await Laptop.findOne(req.body);
-        if (dupplicate) return res.status(400).send({
-            message: 'Laptop already exists'
-        });
+    const duplicate = await Laptop.findOne({ where: { laptopSerialNumber: req.body.laptopSerialNumber }});
+    if (duplicate) return res.status(400).send({ message: 'Laptop already exists' });
 
-        const newLaptop = new Laptop(req.body);
+    const newLaptop = await Laptop.create(req.body);
 
-        const result = await newLaptop.save();
-
-        return res.status(201).send({
-            message: 'CREATED',
-            data: result
-        });
-    } catch (e) {
-        return res.status(500).send(e.toString().split('\"').join(''))
-    }
-}
+    return res.status(201).send({ message: 'CREATED', data: newLaptop });
+  } catch (e) {
+    return res.status(500).send(e.toString().split('\"').join(''));
+  }
+};
 
 /***
- *  updates's a new laptop
+ * Update a laptop
  * @param req
  * @param res
  */
 exports.updateLaptop = async (req, res) => {
-    try {
+  try {
+    if (!validateObjectId(req.params.id))
+      return res.status(400).send({ message: 'Invalid id' });
 
-        if (!validateObjectId(req.params.id))
-            return res.status(400).send({
-                message: 'Invalid id'
-            });
+    const { error } = validateLaptop(req.body);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
-        const {
-            error
-        } = validateLaptop(req.body);
-        if (error) return res.status(400).send({
-            message: error.details[0].message
-        });
+    const updatedLaptop = await Laptop.findByPk(req.params.id);
+    if (!updatedLaptop) return res.status(404).send({ message: 'Laptop not found' });
 
-        const result = await Laptop.findOneAndUpdate({
-            _id: req.params.id
-        }, req.body, {
-            new: true
-        });
+    await updatedLaptop.update(req.body);
 
-        if (!result)
-            return res.status(404).send({
-                message: 'Laptop Not found'
-            });
-
-        return res.status(200).send({
-            message: 'UPDATED',
-            data: result
-        });
-    } catch (e) {
-        return res.status(500).send(e.toString().split('\"').join(''))
-    }
-}
+    return res.status(200).send({ message: 'UPDATED', data: updatedLaptop });
+  } catch (e) {
+    return res.status(500).send(e.toString().split('\"').join(''));
+  }
+};
 
 /***
- *  updates's a new laptop
+ * Delete a laptop
  * @param req
  * @param res
  */
 exports.deleteLaptop = async (req, res) => {
-    try {
+  try {
+    if (!validateObjectId(req.params.id))
+      return res.status(400).send({ message: 'Invalid id' });
 
-        if (!validateObjectId(req.params.id))
-            return res.status(400).send({
-                message: 'Invalid id'
-            });
+    const deletedLaptop = await Laptop.findByPk(req.params.id);
+    if (!deletedLaptop) return res.status(404).send({ message: 'Laptop not found' });
 
-        const result = await Laptop.findOneAndDelete({
-            _id: req.params.id
-        });
-        if (!result)
-            return res.status(404).send({
-                message: 'Laptop not found'
-            });
+    await deletedLaptop.destroy();
 
-        await LaptopEmployee.deleteMany({
-            laptop: req.params.id
-        });
+    await LaptopEmployee.destroy({ where: { laptop: req.params.id } });
 
-        return res.send({
-            message: 'DELETED',
-            data: result
-        });
-    } catch (e) {
-        return res.status(500).send(e.toString().split('\"').join(''))
-    }
-}
+    return res.send({ message: 'DELETED', data: deletedLaptop });
+  } catch (e) {
+    return res.status(500).send(e.toString().split('\"').join(''));
+  }
+};

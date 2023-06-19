@@ -101,7 +101,7 @@ function Employees() {
   return (
     <div className="pl-10 pt-10">
       <div>
-        <div className="title">Employee</div>
+        <div className="title">Employees</div>
         <div className="md:flex">
           <div className="w-full">
             <div className="md:flex">
@@ -151,9 +151,12 @@ function Employees() {
               mb-2 mb-0
             "
                   >
-                    <th>Names</th>
-                    <th>Phone number</th>
-                    <th>Address</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Department</th>
+                    <th>Telephone</th>
+                    <th>Email</th>
+                    <th>Position</th>
                     <th>National Id</th>
                     <th>Actions</th>
                   </tr>
@@ -177,15 +180,28 @@ function Employees() {
                       <td className="pt-1 p-3">
                         <div className="flex">
                           <div></div>
-                          <div>{doc?.names}</div>
+                          <div>{doc?.firstName}</div>
                         </div>
+                      </td>
+                      <td className="pt-1 p-3">
+                        <div className="flex">
+                          <div></div>
+                          <div>{doc?.lastName}</div>
+                        </div>
+                      </td>
+                      <td className="pt-1 p-3">
+                        {" "}
+                        <div className="">{doc?.department}</div>
                       </td>
                       <td className="pt-1 p-3">
                         {" "}
                         <div className="">{doc?.phone}</div>
                       </td>
                       <td className="pt-1 p-3">
-                        <div className="">{doc?.address}</div>
+                        <div className="">{doc?.email}</div>
+                      </td>
+                      <td className="pt-1 p-3">
+                        <div className="">{doc?.position}</div>
                       </td>
                       <td className="pt-1 p-3">{doc?.nationalId}</td>
                       <td className="pt-1 p-3">
@@ -193,9 +209,12 @@ function Employees() {
                           <div
                             onClick={() => {
                               setSelectedEmployee({
-                                names: doc.names,
-                                address: doc.address,
+                                firstName: doc.firstName,
+                                lastName: doc.lastName,
+                                department: doc.department,
                                 phone: doc.phone,
+                                email: doc.email,
+                                position: doc.position,
                                 nationalId: doc.nationalId,
                               });
                               setSelectedEmployeeId(doc._id);

@@ -125,7 +125,7 @@ function LaptopEmployees() {
   return (
     <div className="pl-10 pt-10">
       <div>
-        <div className="title">History of Laptop Ownership</div>
+        <div className="title">Employee Laptop assignment</div>
         <div className="md:flex">
           <div className="w-full">
             <div className="md:flex">
@@ -175,10 +175,9 @@ function LaptopEmployees() {
               mb-2 mb-0
             "
                   >
-                    <th>User Names</th>
-                    <th>Laptop Model</th>
-                    <th>Price(RWF)</th>
-                    <th>Plate Number</th>
+                    <th>Full Names</th>
+                    <th>Computer Model</th>
+                    <th>Serial Number</th>
                     <th>Date Assigned</th>
                     <th>Actions</th>
                   </tr>
@@ -186,7 +185,7 @@ function LaptopEmployees() {
                 <tbody className="sm:flex-1 sm:flex-none">
                   {laptopEmployees.map((doc) => (
                     <tr
-                      key={doc._id}
+                      key={doc.id}
                       className="
               sm:flex
               sm:flex-col
@@ -202,32 +201,31 @@ function LaptopEmployees() {
                       <td className="pt-1 p-3">
                         <div className="flex">
                           <div></div>
-                          <div>{doc?.employee.names}</div>
+                          <div>{doc?.employee.firstName + " " + doc?.employee.lastName}</div>
                         </div>
                       </td>
                       <td className="pt-1 p-3">
                         {" "}
                         <div className="">{doc?.laptop.modelName}</div>
                       </td>
-                      <td className="pt-1 p-3">{doc?.laptop.price}</td>
-                      <td className="pt-1 p-3">{doc?.laptopPlateNumber}</td>
+                      <td className="pt-1 p-3">{doc?.laptopSerialNumber}</td>
                       <td className="pt-1 p-3">
                         {((date) => {
                           return `${date.getDate()}/${
                             date.getMonth() + 1
                           }/${date.getFullYear()}`;
-                        })(new Date(doc?.createdAt))}
+                        })(new Date(doc?.created_at))}
                       </td>
                       <td className="pt-1 p-3">
                         <div className="flex">
                           <div
                             onClick={() => {
                               setSelectedLaptopEmployee({
-                                employee: doc.employee._id,
-                                laptop: doc.laptop._id,
-                                laptopPlateNumber: doc.laptopPlateNumber,
+                                employee: doc.employee.id,
+                                laptop: doc.laptop.id,
+                                laptopSerialNumber: doc.laptopSerialNumber,
                               });
-                              setSelectedLaptopEmployeeId(doc._id);
+                              setSelectedLaptopEmployeeId(doc.id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded mr-2"
@@ -237,7 +235,7 @@ function LaptopEmployees() {
                           <div
                             onClick={() => {
                               setIsDeleting(true);
-                              setSelectedLaptopEmployeeId(doc._id);
+                              setSelectedLaptopEmployeeId(doc.id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded"
@@ -258,7 +256,7 @@ function LaptopEmployees() {
         {isDeleting ? (
           <div>
             <div className="modal-title text-center my-10">
-              Are you sure you want to delete the selected laptopEmployee ?
+              Are you sure you want to delete the selected laptop-Employee ?
             </div>
             <div className="modal-footer my-10">
               <div className="flex justify-center">
@@ -286,7 +284,7 @@ function LaptopEmployees() {
                           htmlFor="department"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Car owner
+                          Employee
                         </label>
                         <select
                           defaultValue={selectedLaptopEmployee?.employee}
@@ -301,7 +299,7 @@ function LaptopEmployees() {
                         >
                           <option value="">Select employee</option>
                           {employees.map((el) => (
-                            <option key={el._id} value={el._id}>
+                            <option key={el.id} value={el.id}>
                               {el.names}
                             </option>
                           ))}
@@ -327,7 +325,7 @@ function LaptopEmployees() {
                         >
                           <option value="">Select laptop</option>
                           {laptops.map((el) => (
-                            <option key={el._id} value={el._id}>
+                            <option key={el.id} value={el.id}>
                               {el.modelName}
                             </option>
                           ))}
@@ -342,12 +340,12 @@ function LaptopEmployees() {
                         </label>
                         <input
                           defaultValue={
-                            selectedLaptopEmployee?.laptopPlateNumber
+                            selectedLaptopEmployee?.laptopSerialNumber
                           }
                           onChange={(e) => {
                             setSelectedLaptopEmployee({
                               ...selectedLaptopEmployee,
-                              laptopPlateNumber: e.target.value,
+                              laptopSerialNumber: e.target.value,
                             });
                           }}
                           type="text"

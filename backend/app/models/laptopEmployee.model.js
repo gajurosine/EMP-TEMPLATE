@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/connectionPool");
+const Employee = require("./employee.model");
+const Laptop = require("./laptop.model");
 const Joi = require('joi');
 
 /**
@@ -7,54 +9,63 @@ const Joi = require('joi');
  * definitions:
  *   LaptopEmployee:
  *     properties:
- *       _id:
+ *       id:
  *         type: string
- *       employee:
+ *       employeeId:
  *         type: string
- *       laptop:
+ *       laptopId:
  *         type: string
  *       laptopSerialNumber:
  *         type: string
  *     required:
- *       - employee
- *       - laptop
+ *       - employeeId
+ *       - laptopId
  *       - laptopSerialNumber
  */
 
-var LaptopEmployee = sequelize.define("laptopEmployees", {
+const LaptopEmployee = sequelize.define("laptopEmployees", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
   },
-  employee: {
-    type: DataTypes.STRING(255),
+  employeeId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'employees',
+      key: 'id'
+    }
   },
-  laptop: {
-    type: DataTypes.STRING(255),
+  laptopId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'laptops',
+      key: 'id'
+    }
   },
   laptopSerialNumber: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
   created_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
   },
   updated_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.literal(
-      "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-    ),
-    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    onUpdate: DataTypes.NOW,
   },
 });
 
-// sync user model with database
+// Define associations
+LaptopEmployee.belongsTo(Employee, { foreignKey: 'employeeId' });
+LaptopEmployee.belongsTo(Laptop, { foreignKey: 'laptopId' });
+
+// Sync laptopEmployee model with the database
 (async () => {
   try {
     await LaptopEmployee.sync();
@@ -65,10 +76,11 @@ var LaptopEmployee = sequelize.define("laptopEmployees", {
 })();
 
 module.exports = LaptopEmployee;
+
 module.exports.validateLaptopEmployee = (body) => {
   return Joi.object({
-    employee: Joi.string().required(),
-    laptop: Joi.string().required(),
-    laptopSerialNumber: Joi.string().required()
+    employeeId: Joi.number().required(),
+    laptopId: Joi.number().required(),
+    laptopSerialNumber: Joi.string().required(),
   }).validate(body);
 };

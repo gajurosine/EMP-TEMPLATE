@@ -1,6 +1,7 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const sequelize = require("../config/connectionPool");
+const { DataTypes, Op } = require('sequelize');
+const sequelize = require('../config/connectionPool');
 const Joi = require('joi');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 /**
@@ -8,7 +9,7 @@ const jwt = require('jsonwebtoken');
  * definitions:
  *   User:
  *     properties:
- *       _id:
+ *       id:
  *         type: string
  *       First name:
  *         type: string
@@ -36,18 +37,18 @@ const jwt = require('jsonwebtoken');
  *       - position
  */
 
-var User = sequelize.define("users", {
+const User = sequelize.define('user-table', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
   },
-  first_name: {
+  firstName: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-  last_name: {
+  lastName: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
@@ -68,56 +69,62 @@ var User = sequelize.define("users", {
     allowNull: false,
   },
   email: {
-    type: Sequelize.STRING(255),
+    type: DataTypes.STRING(255),
     allowNull: false,
     unique: true,
   },
   password: {
-    type: Sequelize.STRING(255),
+    type: DataTypes.STRING(255),
     allowNull: false,
   },
   created_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
   },
   updated_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.literal(
-      "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-    ),
-    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    onUpdate: DataTypes.NOW,
   },
 });
 
-// sync user model with database
+// Sync employee model with the database
 (async () => {
   try {
     await User.sync();
-    console.log("Users table created successfully");
+    console.log("User table created successfully");
   } catch (err) {
-    console.error("Error syncing Users table:", err);
+    console.error("Error syncing User table:", err);
   }
 })();
 
-module.exports.NationalIdPattern = /(?<!\d)\d{16}(?!\d)/;
-module.exports.PhoneRegex = /(?<!\d)\d{10}(?!\d)/
+User.prototype.generateAuthToken = function () {
+  const token = jwt.sign({ id: this.id }, process.env.JWT_SECRET);
+  return token;
+};
 
 module.exports = User;
+
 module.exports.validateUser = (body, isUpdating = false) => {
   return Joi.object({
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().pattern(this.PhoneRegex).required(), // validate phone
+    phone: Joi.string().pattern(/(?<!\d)\d{10}(?!\d)/).required(),
     password: isUpdating ? Joi.string().min(6) : Joi.string().min(6).required(),
-    nationalId: Joi.string().pattern(this.NationalIdPattern).length(16).required(),
+    nationalId: Joi.string().pattern(/(?<!\d)\d{16}(?!\d)/).length(16).required(),
+    department: Joi.string().required(),
+    position: Joi.string().required()
   }).validate(body);
 };
 
 module.exports.validateUserLogin = (body) => {
   return Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().required()
+    password: Joi.string().required(),
   }).validate(body);
 };
+
+
+module.exports.NationalIdPattern = /(?<!\d)\d{16}(?!\d)/;
+module.exports.PhoneRegex = /(?<!\d)\d{10}(?!\d)/

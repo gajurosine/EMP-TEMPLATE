@@ -1,11 +1,16 @@
 const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose')
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/connectionPool');
 
 /***
  * @param id
  * @returns {boolean}
  */
- exports.validateObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+ exports.validateObjectId = (id) => {
+  if(!id)
+    return false;
+  return true;
+ };
 
 /**
  *  Encrypt password

@@ -1,7 +1,5 @@
-const dbConfig = require("../config/db.config.js");
-
 const { Sequelize } = require('sequelize');
-const sequelize = require('./config/db.config');
+const sequelize = require('../config/dbConnection');
 
 async function db() {
     try {

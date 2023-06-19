@@ -8,11 +8,11 @@ const { NationalIdPattern, PhoneRegex } = require("./user.model");
  * definitions:
  *   Employee:
  *     properties:
- *       _id:
+ *       id:
  *         type: string
- *       First name:
+ *       firstName:
  *         type: string
- *       Last name:
+ *       lastName:
  *         type: string
  *       email:
  *         type: string
@@ -25,7 +25,8 @@ const { NationalIdPattern, PhoneRegex } = require("./user.model");
  *       position:
  *         type: string
  *     required:
- *       - names
+ *       - firstName
+ *       - lastName
  *       - email
  *       - phone
  *       - nationalId
@@ -33,18 +34,18 @@ const { NationalIdPattern, PhoneRegex } = require("./user.model");
  *       - position
  */
 
-var Employee = sequelize.define("employees", {
+const Employee = sequelize.define("employees", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
   },
-  first_name: {
+  firstName: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-  last_name: {
+  lastName: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
@@ -65,25 +66,22 @@ var Employee = sequelize.define("employees", {
     allowNull: false,
   },
   email: {
-    type: Sequelize.STRING(255),
+    type: DataTypes.STRING(255),
     allowNull: false,
     unique: true,
   },
   created_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
   },
   updated_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.literal(
-      "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-    ),
-    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    onUpdate: DataTypes.NOW,
   },
 });
 
-// sync employee model with database
+// Sync employee model with the database
 (async () => {
   try {
     await Employee.sync();
@@ -97,10 +95,10 @@ module.exports = Employee;
 
 module.exports.validateEmployee = (body) => {
   return Joi.object({
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().pattern(PhoneRegex).required(), // validate phone
+    phone: Joi.string().pattern(PhoneRegex).required(),
     department: Joi.string().required(),
     position: Joi.string().required(),
     nationalId: Joi.string().pattern(NationalIdPattern).length(16).required(),

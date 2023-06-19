@@ -1,91 +1,45 @@
-const {
-  compare
-} = require("bcryptjs");
-const {
-  validateUser,
-  validateUserLogin,
-  User
-} = require("../models/user.model");
-const {
-  hashPassword
-} = require("../utils/imports");
+const bcrypt = require('bcryptjs');
+const { validateUser, validateUserLogin } = require('../models/user.model');
+const User = require('../models/user.model');
+const { hashPassword } = require('../utils/imports');
 
 /***
- *  Create's a new user
+ *  Create a new user
  * @param req
  * @param res
  */
 exports.createUser = async (req, res) => {
   try {
-    const {
-      error
-    } = validateUser(req.body);
-    if (error) return res.status(400).send({
-      message: error.details[0].message
-    });
+    const { error } = validateUser(req.body);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
-    let count = await User.countDocuments({});
-    if (count) return res.status(400).send({message: "Admin is already created"});
-
-    // let {
-    //   email,
-    //   nationalId,
-    //   phone
-    // } = req.body
-
-    // let user = await User.findOne({
-    //   $or: [{
-    //     email
-    //   }, {
-    //     nationalId
-    //   }, {
-    //     phone
-    //   }],
-    // })
-
-    // if (user) {
-    //   const phoneFound = phone == user.phone
-    //   const emailFound = email == user.email
-    //   return res.status(400).send({
-    //     message: `User with same ${phoneFound ? 'phone ' : emailFound ? 'email ' : 'nationalId '} arleady exist`
-    //   });
-    // }
+    let count = await User.count();
+    if (count) return res.status(400).send({ message: 'Admin is already created' });
 
     req.body.password = await hashPassword(req.body.password);
 
-    const newUser = new User(req.body);
+    const newUser = await User.create(req.body);
 
-    const result = await newUser.save();
-
-    return res.status(201).send({
-      message: 'CREATED',
-      data: result
-    });
+    return res.status(201).send({ message: 'CREATED', data: newUser });
   } catch (e) {
-    return res.status(500).send(e.toString().split('\"').join(''))
+    return res.status(500).send(e.toString().split('"').join(''));
   }
-}
+};
 
 /***
- *  Create's a new user
+ * Get the current user
  * @param req
  * @param res
  */
- exports.getCurrentUser = async (req, res) => {
+exports.getCurrentUser = async (req, res) => {
   try {
+    const result = await User.findOne({ where: { id: req.user.id } });
 
-    const result = await User.findOne({
-      _id: req.user._id
-    });
-
-    return res.status(201).send({
-      message: 'OK',
-      data: result
-    });
+    return res.status(200).send({ message: 'OK', data: result });
   } catch (e) {
-    return res.status(500).send(e.toString().split('\"').join(''))
+    return res.status(500).send(e.toString().split('"').join(''));
   }
-}
+};
 
 /**
  * Login User
@@ -94,112 +48,70 @@ exports.createUser = async (req, res) => {
  */
 exports.userLogin = async (req, res) => {
   try {
-    const {
-      error
-    } = validateUserLogin(req.body);
-    if (error) return res.status(400).send({
-      message: error.details[0].message
-    });
+    const { error } = validateUserLogin(req.body);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
-    const user = await User.findOne({
-      email: req.body.email
-    });
-    if (!user) return res.status(404).send({
-      message: 'Invalid credentials'
-    });
+    const user = await User.findOne({ where: { email: req.body.email } });
+    if (!user) return res.status(404).send({ message: 'Invalid credentials' });
 
-    const validPassword = await compare(req.body.password, user.password);
-    if (!validPassword) return res.status(404).send({
-      message: 'Invalid credentials'
-    });
-    return res.status(200).send({
-      message: 'OK',
-      token: await user.generateAuthToken()
-    });
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!validPassword) return res.status(404).send({ message: 'Invalid credentials' });
 
+    const token = user.generateAuthToken();
+
+    return res.status(200).send({ message: 'OK', token });
   } catch (e) {
-    return res.status(500).send(e.toString().split('\"').join(''))
+    return res.status(500).send(e.toString().split('"').join(''));
   }
-}
+};
 
 /***
- *  updates's a new user
+ * Update a user
  * @param req
  * @param res
  */
 exports.updateUser = async (req, res) => {
   try {
+    const { error } = validateUser(req.body, true);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
-    const {
-      error
-    } = validateUser(req.body,true);
-    if (error) return res.status(400).send({
-      message: error.details[0].message
+    const { email, nationalId, phone } = req.body;
+
+    const duplicateUser = await User.findOne({
+      where: {
+        id: { [Op.not]: req.user.id },
+        [Op.or]: [{ email }, { nationalId }, { phone }],
+      },
     });
 
-    let {
-      email,
-      nationalId,
-      phone
-    } = req.body
-
-    let dupplicate_user = await User.findOne({
-      _id: {
-        $ne: req.user._id
-      },
-      $or: [{
-        email: email
-      }, {
-        nationalId: nationalId
-      }, {
-        phone: phone
-      }],
-    })
-
-    if (dupplicate_user) {
-      const phoneFound = phone == dupplicate_user.phone
-      const emailFound = email == dupplicate_user.email
+    if (duplicateUser) {
+      const phoneFound = phone === duplicateUser.phone;
+      const emailFound = email === duplicateUser.email;
       return res.status(400).send({
-        message: `User with same ${phoneFound ? 'phone ' : emailFound ? 'email ' :  'nationalId '} arleady exist`
+        message: `User with the same ${phoneFound ? 'phone' : emailFound ? 'email' : 'nationalId'} already exists`,
       });
     }
 
-    const result = await User.findOneAndUpdate({
-      _id: req.user._id
-    }, req.body, {
-      new: true
-    });
+    const result = await User.update(req.body, { where: { id: req.user.id }, returning: true });
 
-    return res.status(200).send({
-      message: 'UPDATED',
-      data: result
-    });
+    return res.status(200).send({ message: 'UPDATED', data: result[1][0] });
   } catch (e) {
-    return res.status(500).send(e.toString().split('\"').join(''))
+    return res.status(500).send(e.toString().split('"').join(''));
   }
-}
+};
 
 /***
- *  updates's a new user
+ * Delete a user
  * @param req
  * @param res
  */
 exports.deleteUser = async (req, res) => {
   try {
+    const result = await User.destroy({ where: { id: req.user.id } });
+    if (!result) return res.status(404).send({ message: 'User not found' });
 
-    const result = await User.findOneAndDelete({
-      _id: req.user._id
-    });
-    if (!result)
-      return res.status(404).send({
-        message: 'User not found'
-      });
-
-    return res.send({
-      message: 'DELETED',
-      data: result
-    });
+    return res.send({ message: 'DELETED', data: result });
   } catch (e) {
-    return res.status(500).send(e.toString().split('\"').join(''))
+    return res.status(500).send(e.toString().split('"').join(''));
   }
-}
+};
