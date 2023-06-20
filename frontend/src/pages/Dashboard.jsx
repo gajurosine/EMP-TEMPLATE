@@ -18,16 +18,23 @@ import { selectLaptops, setLaptops } from "../store/modules/laptopSlice";
 
 function LaptopEmployees() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
-  const laptopEmployees = useSelector(selectLaptopEmployees);
+  // const laptopEmployees = useSelector(selectLaptopEmployees);
+  // console.log(laptopEmployees);
+  
   const employees = useSelector(selectEmployees);
   const laptops = useSelector(selectLaptops);
   const dispatch = useDispatch();
   const [filter, setFilter] = useState({});
 
+  const [laptopEmployees, setLaptopEmployees] = useState([]);
+
   useEffect(() => {
     if (isLoggedIn) {
       AppServices.getLaptopEmployees().then((response) => {
         if (response.data.data) {
+          console.log(response.data.data.items);
+          setLaptopEmployees(response.data.data.items);
+          console.log(laptopEmployees);
           dispatch(setLaptopEmployees(response.data.data));
         }
       });
@@ -183,9 +190,9 @@ function LaptopEmployees() {
                   </tr>
                 </thead>
                 <tbody className="sm:flex-1 sm:flex-none">
-                  {laptopEmployees.map((doc) => (
+                  {laptopEmployees.map((doc, index) => (
                     <tr
-                      key={doc.id}
+                      key={index}
                       className="
               sm:flex
               sm:flex-col
@@ -298,11 +305,11 @@ function LaptopEmployees() {
                           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
                           <option value="">Select employee</option>
-                          {employees.map((el) => (
+                          {/* {employees.map((el) => (
                             <option key={el.id} value={el.id}>
                               {el.names}
                             </option>
-                          ))}
+                          ))} */}
                         </select>
                       </div>
                       <div className="col-span-6 sm:col-span-3">
