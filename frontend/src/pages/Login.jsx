@@ -166,11 +166,33 @@ function Login() {
                           htmlFor="first-name"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Names
+                          First name
                         </label>
                         <input
                           onChange={(e) => {
-                            setAdmin({ ...admin, names: e.target.value || "" });
+                            setAdmin({
+                              ...admin,
+                              firstName: e.target.value || "",
+                            });
+                          }}
+                          type="text"
+                          id="first-name"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="last-name"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Last name
+                        </label>
+                        <input
+                          onChange={(e) => {
+                            setAdmin({
+                              ...admin,
+                              lastName: e.target.value || "",
+                            });
                           }}
                           type="text"
                           id="first-name"
@@ -223,6 +245,44 @@ function Login() {
                             setAdmin({
                               ...admin,
                               nationalId: e.target.value || "",
+                            });
+                          }}
+                          type="string"
+                          id="nid"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="position"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Position
+                        </label>
+                        <input
+                          onChange={(e) => {
+                            setAdmin({
+                              ...admin,
+                              position: e.target.value || "",
+                            });
+                          }}
+                          type="string"
+                          id="nid"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="department"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Department
+                        </label>
+                        <input
+                          onChange={(e) => {
+                            setAdmin({
+                              ...admin,
+                              department: e.target.value || "",
                             });
                           }}
                           type="string"
