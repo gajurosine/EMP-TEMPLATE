@@ -164,7 +164,7 @@ function Employees() {
                 <tbody className="sm:flex-1 sm:flex-none">
                   {employees.map((doc) => (
                     <tr
-                      key={doc._id}
+                      key={doc.id}
                       className="
               sm:flex
               sm:flex-col
@@ -217,7 +217,7 @@ function Employees() {
                                 position: doc.position,
                                 nationalId: doc.nationalId,
                               });
-                              setSelectedEmployeeId(doc._id);
+                              setSelectedEmployeeId(doc.id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded mr-2"
@@ -227,7 +227,7 @@ function Employees() {
                           <div
                             onClick={() => {
                               setIsDeleting(true);
-                              setSelectedEmployeeId(doc._id);
+                              setSelectedEmployeeId(doc.id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded"

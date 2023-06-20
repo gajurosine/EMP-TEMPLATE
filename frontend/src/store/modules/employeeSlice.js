@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  employees: { docs: [] },
+  employees: [],
   isEmployeesLoaded: false,
 };
 
@@ -14,24 +14,24 @@ export const AuthSlice = createSlice({
       state.isEmployeesLoaded = true;
     },
     addEmployee: (state, action) => {
-      state.employees.docs = [...state.employees.docs, action.payload];
+      state.employees = [...state.employees, action.payload];
     },
     updateEmployee: (state, action) => {
-      for (const i in state.employees.docs) {
-        if (state.employees.docs[i]._id === action.payload._id) {
-          state.employees.docs[i] = action.payload;
+      for (const i in state.employees) {
+        if (state.employees[i].id === action.payload.id) {
+          state.employees[i] = action.payload;
         }
       }
     },
     removeEmployee: (state, action) => {
-      state.employees.docs = state.employees.docs.filter((employee) => employee._id !== action.payload);
+      state.employees = state.employees.filter((employee) => employee.id !== action.payload);
     },
   },
 });
 
 export const { setEmployees, addEmployee, removeEmployee, updateEmployee } = AuthSlice.actions;
 
-export const selectEmployees = (state) => state.employee.employees.docs;
+export const selectEmployees = (state) => state.employee.employees;
 export const isEmployeesLoaded = (state) => states.employee.isEmployeesLoaded;
 
 export default AuthSlice.reducer;

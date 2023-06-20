@@ -18,23 +18,16 @@ import { selectLaptops, setLaptops } from "../store/modules/laptopSlice";
 
 function LaptopEmployees() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
-  // const laptopEmployees = useSelector(selectLaptopEmployees);
-  // console.log(laptopEmployees);
-  
+  const laptopEmployees = useSelector(selectLaptopEmployees);
   const employees = useSelector(selectEmployees);
   const laptops = useSelector(selectLaptops);
   const dispatch = useDispatch();
   const [filter, setFilter] = useState({});
 
-  const [laptopEmployees, setLaptopEmployees] = useState([]);
-
   useEffect(() => {
     if (isLoggedIn) {
       AppServices.getLaptopEmployees().then((response) => {
         if (response.data.data) {
-          console.log(response.data.data.items);
-          setLaptopEmployees(response.data.data.items);
-          console.log(laptopEmployees);
           dispatch(setLaptopEmployees(response.data.data));
         }
       });
@@ -190,7 +183,7 @@ function LaptopEmployees() {
                   </tr>
                 </thead>
                 <tbody className="sm:flex-1 sm:flex-none">
-                  {laptopEmployees.map((doc, index) => (
+                  {laptopEmployees.map((item, index) => (
                     <tr
                       key={index}
                       className="
@@ -208,31 +201,31 @@ function LaptopEmployees() {
                       <td className="pt-1 p-3">
                         <div className="flex">
                           <div></div>
-                          <div>{doc?.employee.firstName + " " + doc?.employee.lastName}</div>
+                          <div>{item?.employee.firstName + " " + item?.employee.lastName}</div>
                         </div>
                       </td>
                       <td className="pt-1 p-3">
                         {" "}
-                        <div className="">{doc?.laptop.modelName}</div>
+                        <div className="">{item?.laptop.modelName}</div>
                       </td>
-                      <td className="pt-1 p-3">{doc?.laptopSerialNumber}</td>
+                      <td className="pt-1 p-3">{item?.laptopSerialNumber}</td>
                       <td className="pt-1 p-3">
                         {((date) => {
                           return `${date.getDate()}/${
                             date.getMonth() + 1
                           }/${date.getFullYear()}`;
-                        })(new Date(doc?.created_at))}
+                        })(new Date(item?.created_at))}
                       </td>
                       <td className="pt-1 p-3">
                         <div className="flex">
                           <div
                             onClick={() => {
                               setSelectedLaptopEmployee({
-                                employee: doc.employee.id,
-                                laptop: doc.laptop.id,
-                                laptopSerialNumber: doc.laptopSerialNumber,
+                                employee: item.employee.id,
+                                laptop: item.laptop.id,
+                                laptopSerialNumber: item.laptopSerialNumber,
                               });
-                              setSelectedLaptopEmployeeId(doc.id);
+                              setSelectedLaptopEmployeeId(item.id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded mr-2"
@@ -242,7 +235,7 @@ function LaptopEmployees() {
                           <div
                             onClick={() => {
                               setIsDeleting(true);
-                              setSelectedLaptopEmployeeId(doc.id);
+                              setSelectedLaptopEmployeeId(item.id);
                               toggleModal();
                             }}
                             className="status cursor-pointer rounded"

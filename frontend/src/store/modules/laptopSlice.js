@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  laptops: { docs: [] },
+  laptops: { rows: [] },
   isLaptopsLoaded: false,
 };
 
@@ -14,24 +14,24 @@ export const AuthSlice = createSlice({
       state.isLaptopsLoaded = true;
     },
     addLaptop: (state, action) => {
-      state.laptops.docs = [...state.laptops.docs, action.payload];
+      state.laptops.rows = [...state.laptops.rows, action.payload];
     },
     updateLaptop: (state, action) => {
-      for (const i in state.laptops.docs) {
-        if (state.laptops.docs[i]._id === action.payload._id) {
-          state.laptops.docs[i] = action.payload;
+      for (const i in state.laptops.rows) {
+        if (state.laptops.rows[i].id === action.payload.id) {
+          state.laptops.rows[i] = action.payload;
         }
       }
     },
     removeLaptop: (state, action) => {
-      state.laptops.docs = state.laptops.docs.filter((laptop) => laptop._id !== action.payload);
+      state.laptops.rows = state.laptops.rows.filter((laptop) => laptop.id !== action.payload);
     },
   },
 });
 
 export const { setLaptops, addLaptop, removeLaptop, updateLaptop } = AuthSlice.actions;
 
-export const selectLaptops = (state) => state.laptop.laptops.docs;
+export const selectLaptops = (state) => state.laptop.laptops.rows;
 export const isLaptopsLoaded = (state) => states.laptop.isLaptopsLoaded;
 
 export default AuthSlice.reducer;
