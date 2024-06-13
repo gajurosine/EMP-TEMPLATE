@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_URL = "http://localhost:8001/api";
+export const API_URL = "http://localhost:5000/api";
 
 
 class AppServices {

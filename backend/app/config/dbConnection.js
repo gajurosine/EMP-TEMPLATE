@@ -4,8 +4,8 @@ const { debuglog } = require("util");
 require("dotenv").config();
 
 const sequelize = new Sequelize({
-    dialect: "postgresql",
-    // dialect: "mysql",
+    // dialect: "postgresql",
+    dialect: "mysql",
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     username: process.env.DB_USER,

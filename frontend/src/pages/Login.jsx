@@ -57,7 +57,7 @@ function Login() {
         }
         navigate("/");
         setSubmitted(false);
-        return "Logged in successfully";
+        return "Login in successfully";
       },
       error: (error) => {
         const message =
@@ -87,7 +87,7 @@ function Login() {
         success: () => {
           toggleModal();
           setSubmitted(false);
-          return "Registered successfully";
+          return "successful to register";
         },
         error: (error) => {
           const message =
@@ -107,25 +107,25 @@ function Login() {
   };
 
   return (
-    <div className="bg-[#229F97] h-screen flex justify-center">
+    <div className="bg-[#0F5A65] h-screen flex justify-center">
       <div className="form bg-main flex max-w-md w-screen h-max justify-center p-8 m-auto">
         <form className="text-center" onSubmit={handleLogin}>
-          <img src={logo} className="mb-2 h-1/6 mx-auto" alt="" />
-          <div className="title mb-8">
-            Welcome to EDS <br />
-            <div className="small">Laptop Tracking Management System</div>
+          <img src={logo} className="mb-8 h-1/6 mx-auto" alt="" />
+          <div className="title mb-3">
+            Hello, <br />
+            <div className="small">Welcome Back!</div>
           </div>
-          <div className="input-container  mb-8">
+          <div className="input-container  mb-8 focus:border-black-500">
             <input
               onChange={onChangeEmail}
               className="bg"
-              placeholder="email"
+              placeholder="example@gmail.com"
               type="text"
               name=""
               id=""
-            />
+              />
           </div>
-          <div className="input-container  mb-8">
+          <div className="input-container focus:border-black-700 mb-3">
             <input
               onChange={onChangePassword}
               className="bg"
@@ -137,16 +137,16 @@ function Login() {
           </div>
           <div className="input-container  mb-8">
             <input
-              className="submit bg-[#229F97] text-main cursor-pointer"
+              className="submit bg-[#0F5A65] text-main cursor-pointer"
               type="submit"
               value="submit"
             />
           </div>
           <div
             onClick={toggleModal}
-            className="input-container  mb-[-60px] text-primary cursor-pointer"
+            className="input-container  mb-[-60px] cursor-pointer text-green-700 	"
           >
-            Don't have an account? Signup
+            Don't have an account? <span className="text-green-700 " >Create Account</span> 
           </div>
         </form>
       </div>
@@ -155,11 +155,11 @@ function Login() {
         width="767px"
         children={
           <div>
-            <div className="modal-title text-center my-10">Signup</div>
+            <div className="modal-title text-center text-green-700 my-9">Signup</div>
             <div className="modal-body">
               <form>
                 <div className="">
-                  <div className="px-4 py-5 bg-white sm:p-6">
+                  <div className="px-4 py-5 bg-[#F5F5F5] sm:p-6">
                     <div className="grid grid-cols-6 gap-6">
                       <div className="col-span-6 sm:col-span-3">
                         <label
@@ -177,13 +177,13 @@ function Login() {
                           }}
                           type="text"
                           id="first-name"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-800 block w-full shadow-sm sm:text-sm border-black-900 rounded-md"
                         />
                       </div>
                       <div className="col-span-6 sm:col-span-3">
                         <label
                           htmlFor="last-name"
-                          className="block text-sm font-medium text-gray-700"
+                          className="block text-sm font-medium text-black-700"
                         >
                           Last name
                         </label>
@@ -255,7 +255,7 @@ function Login() {
                       <div className="col-span-6 sm:col-span-3">
                         <label
                           htmlFor="position"
-                          className="block text-sm font-medium text-gray-700"
+                          className="block text-sm font-medium text-gray-70"
                         >
                           Position
                         </label>
@@ -274,7 +274,7 @@ function Login() {
                       <div className="col-span-6 sm:col-span-3">
                         <label
                           htmlFor="department"
-                          className="block text-sm font-medium text-gray-700"
+                          className="block text-sm font-medium text-gray-70"
                         >
                           Department
                         </label>
@@ -293,7 +293,7 @@ function Login() {
                       <div className="col-span-6 sm:col-span-3">
                         <label
                           htmlFor="password"
-                          className="block text-sm font-medium text-gray-700"
+                          className="block text-sm font-medium text-gray-70"
                         >
                           Password
                         </label>
@@ -325,23 +325,23 @@ function Login() {
                           }}
                           type="password"
                           id="confirmPassword"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          className="mt-9 focus:ring-indigo-00 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="">
+                  <div className=" ">
                     <button type="submit" hidden></button>
                   </div>
                 </div>
               </form>
             </div>
-            <div className="modal-footer my-10">
+            <div className="modal-footer my-14">
               <div className="flex justify-center">
-                <button className="cancel mr-9" onClick={toggleModal}>
-                  Cancel
+                <button className="cancel mr-9 text-green-700" onClick={toggleModal}>
+                  Login
                 </button>
-                <button onClick={handleRegister}>Submit</button>
+                <button onClick={handleRegister} className=" text-green-700">Submit</button>
               </div>
             </div>
           </div>

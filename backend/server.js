@@ -1,12 +1,11 @@
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
-
 const dotenv = require('dotenv');
 dotenv.config();
 const app = require("./app");
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 const host = process.env.HOST || "localhost";
 
 const swaggerOptions = {
@@ -17,7 +16,7 @@ const swaggerOptions = {
           description: "Equipment Distribution System by Mr. Bill",
       },
       schemes: [process.env.NODE_ENV === "production" ? "https" : "http"],
-      host: host+":"+PORT,
+      host: `${host}:${PORT}`,
       basePath: "/api",
       securityDefinitions: {
           bearerAuth: {

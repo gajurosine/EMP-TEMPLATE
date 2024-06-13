@@ -37,7 +37,7 @@ const jwt = require('jsonwebtoken');
  *       - position
  */
 
-const User = sequelize.define('user-table', {
+const User = sequelize.define('user_table', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
