@@ -150,5 +150,5 @@ module.exports = (app) => {
      */
     .post(userLogin)
 
-  app.use("/api/users", router);
+  app.use("/api/users",router);
 };

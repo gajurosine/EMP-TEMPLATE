@@ -4,39 +4,6 @@ const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-/**
- * @swagger
- * definitions:
- *   User:
- *     properties:
- *       id:
- *         type: string
- *       First name:
- *         type: string
- *       Last name:
- *         type: string
- *       email:
- *         type: string
- *       password:
- *         type: string
- *       phone:
- *         type: string
- *       nationalId:
- *         type: string
- *       department:
- *         type: string
- *       position:
- *         type: string
- *     required:
- *       - names
- *       - email
- *       - password
- *       - phone
- *       - nationalId
- *       - department
- *       - position
- */
-
 const User = sequelize.define('user_table', {
   id: {
     type: DataTypes.INTEGER,
@@ -125,6 +92,5 @@ module.exports.validateUserLogin = (body) => {
   }).validate(body);
 };
 
-
 module.exports.NationalIdPattern = /(?<!\d)\d{16}(?!\d)/;
-module.exports.PhoneRegex = /(?<!\d)\d{10}(?!\d)/
+module.exports.PhoneRegex = /(?<!\d)\d{10}(?!\d)/;

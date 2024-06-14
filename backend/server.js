@@ -13,7 +13,7 @@ const swaggerOptions = {
       info: {
           title: "Equipment Distribution System API Documentation",
           version: "1.0.0",
-          description: "Equipment Distribution System by Mr. Bill",
+          description: "Equipment Distribution System by Mrs.Rosine",
       },
       schemes: [process.env.NODE_ENV === "production" ? "https" : "http"],
       host: `${host}:${PORT}`,
