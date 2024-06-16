@@ -65,15 +65,14 @@ function LaptopEmployees() {
       isDeleting
         ? AppServices.deleteLaptopEmployee(selectedLaptopEmployeeId)
         : isUpdating
-        ? AppServices.updateLaptopEmployee(
+          ? AppServices.updateLaptopEmployee(
             selectedLaptopEmployee,
             selectedLaptopEmployeeId
           )
-        : AppServices.registerLaptopEmployee(selectedLaptopEmployee),
+          : AppServices.registerLaptopEmployee(selectedLaptopEmployee),
       {
-        loading: `${
-          isDeleting ? "Deleting" : isUpdating ? "Updating" : "Creating"
-        } laptopEmployee ...`,
+        loading: `${isDeleting ? "Deleting" : isUpdating ? "Updating" : "Creating"
+          } laptopEmployee ...`,
         success: (response) => {
           if (isDeleting)
             dispatch(removeLaptopEmployee(selectedLaptopEmployeeId));
@@ -96,9 +95,8 @@ function LaptopEmployees() {
             );
           }
 
-          let message = `${
-            isDeleting ? "Deleted" : isUpdating ? "Updated" : "Created"
-          } laptopEmployee successfully`;
+          let message = `${isDeleting ? "Deleted" : isUpdating ? "Updated" : "Created"
+            } laptopEmployee successfully`;
           if (isUpdating) setSelectedLaptopEmployeeId("");
           if (isDeleting) setIsDeleting(false);
           setSelectedLaptopEmployee({});
@@ -201,7 +199,11 @@ function LaptopEmployees() {
                       <td className="pt-1 p-3">
                         <div className="flex">
                           <div></div>
-                          <div>{item?.employee.firstName + " " + item?.employee.lastName}</div>
+                          <div>
+                            {item?.employee.firstName +
+                              " " +
+                              item?.employee.lastName}
+                          </div>
                         </div>
                       </td>
                       <td className="pt-1 p-3">
@@ -211,9 +213,8 @@ function LaptopEmployees() {
                       <td className="pt-1 p-3">{item?.laptopSerialNumber}</td>
                       <td className="pt-1 p-3">
                         {((date) => {
-                          return `${date.getDate()}/${
-                            date.getMonth() + 1
-                          }/${date.getFullYear()}`;
+                          return `${date.getDate()}/${date.getMonth() + 1
+                            }/${date.getFullYear()}`;
                         })(new Date(item?.created_at))}
                       </td>
                       <td className="pt-1 p-3">
@@ -297,7 +298,7 @@ function LaptopEmployees() {
                           id="first-name"
                           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
-                         <option value="">Select laptop</option>
+                          <option value="">Select employee</option>
                           {employees.map((el) => (
                             <option key={el.id} value={el.id}>
                               {el.firstName + el.lastName}

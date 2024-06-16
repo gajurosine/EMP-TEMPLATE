@@ -60,7 +60,7 @@ class AppServices {
   }
 
   registerLaptopEmployee(body) {
-    return axios.post(`${API_URL}/laptopEmployees/`, body);
+    return axios.post(`${API_URL}/laptopEmployees/`, {employeeId: parseInt(body.employee), laptopId: body.laptop, laptopSerialNumber: body.laptopSerialNumber});
   }
   getLaptopEmployees(query = "page=1&limit=10") {
     return axios.get(`${API_URL}/laptopEmployees?${query}`);
