@@ -29,6 +29,7 @@ function Login() {
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
+
     } else {
       dispatch(loadUser());
     }

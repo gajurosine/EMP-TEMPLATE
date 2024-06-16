@@ -276,14 +276,14 @@ function Employees() {
                           htmlFor="first-name"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Names
+                          firstName
                         </label>
                         <input
-                          defaultValue={selectedEmployee?.names}
+                          defaultValue={selectedEmployee?.firstName}
                           onChange={(e) => {
                             setSelectedEmployee({
                               ...selectedEmployee,
-                              names: e.target.value,
+                              firstName: e.target.value,
                             });
                           }}
                           type="text"
@@ -292,23 +292,44 @@ function Employees() {
                         />
                       </div>
 
+
                       <div className="col-span-6 sm:col-span-3">
                         <label
                           htmlFor="last-name"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Address
+                          lastName
                         </label>
                         <input
-                          defaultValue={selectedEmployee?.address}
+                          defaultValue={selectedEmployee?.lastName}
                           onChange={(e) => {
                             setSelectedEmployee({
                               ...selectedEmployee,
-                              address: e.target.value,
+                              lastName: e.target.value,
                             });
                           }}
                           type="text"
                           id="last-name"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="email-address"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                         Email Address
+                        </label>
+                        <input
+                          defaultValue={selectedEmployee?.email}
+                          onChange={(e) => {
+                            setSelectedEmployee({
+                              ...selectedEmployee,
+                              email: e.target.value,
+                            });
+                          }}
+                          type="text"
+                          id="email-address"
                           className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         />
                       </div>
@@ -357,6 +378,51 @@ function Employees() {
                           className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         />
                       </div>
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="department"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Department
+                        </label>
+                        <input
+                          defaultValue={selectedEmployee?.department}
+                          onChange={(e) => {
+                            setSelectedEmployee({
+                              ...selectedEmployee,
+                              department: e.target.value,
+                            });
+                          }}
+                          type="text"
+                          id="department"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          htmlFor="position"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Position
+                        </label>
+                        <input
+                          defaultValue={selectedEmployee?.position}
+                          onChange={(e) => {
+                            setSelectedEmployee({
+                              ...selectedEmployee,
+                              position: e.target.value,
+                            });
+                          }}
+                          type="text"
+                          id="position"
+                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                        />
+                      </div>
+
+
                     </div>
                   </div>
                 </div>

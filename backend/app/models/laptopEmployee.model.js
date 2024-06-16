@@ -23,7 +23,7 @@ const Joi = require('joi');
  *       - laptopSerialNumber
  */
 
-const LaptopEmployee = sequelize.define("laptopEmployees", {
+const LaptopEmployee = sequelize.define("laptopEmployee", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -34,7 +34,7 @@ const LaptopEmployee = sequelize.define("laptopEmployees", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'employees',
+      model: Employee, // Referencing the Employee model
       key: 'id'
     }
   },
@@ -42,7 +42,7 @@ const LaptopEmployee = sequelize.define("laptopEmployees", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'laptops',
+      model: Laptop, // Referencing the Laptop model
       key: 'id'
     }
   },
@@ -68,10 +68,10 @@ LaptopEmployee.belongsTo(Laptop, { foreignKey: 'laptopId' });
 // Sync laptopEmployee model with the database
 (async () => {
   try {
-    await LaptopEmployee.sync();
-    console.log("LaptopEmployee table created successfully");
+    await sequelize.sync();
+    console.log("Database synchronized successfully");
   } catch (err) {
-    console.error("Error syncing LaptopEmployee table:", err);
+    console.error("Error syncing database:", err);
   }
 })();
 

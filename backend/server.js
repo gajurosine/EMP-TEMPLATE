@@ -38,7 +38,7 @@ app.get("/swagger.json", function (req, res) {
   res.send(swaggerDocs);
 });
 
-app.use("/api", swaggerUi.serve, swaggerUi.setup(swaggerDocs, false, { docExpansion: "none" }));
+app.use("/api/user", swaggerUi.serve, swaggerUi.setup(swaggerDocs, false, { docExpansion: "none" }));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

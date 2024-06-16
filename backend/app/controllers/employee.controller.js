@@ -16,13 +16,14 @@ exports.getAllEmployees = async (req, res) => {
 
     if (!page || page < 1) page = 1;
 
-    if (!limit) limit = 10;
+    if (!limit || limit <10) limit = 10;
 
     const options = {
       offset: (page - 1) * limit,
-      limit: limit,
+      limit: Number(limit),
     };
 
+    console.log('options', options);
     const data = await Employee.findAll(options);
 
     res.send({ data });
