@@ -6,7 +6,7 @@
     font-size: 20px;
     line-height: 27px;
 
-    color: #b6c0c9;
+    color: #5797e4;
     &.small {
       font-size: 20px;
     }
@@ -17,7 +17,7 @@
     font-weight: 600;
     font-size: 24px;
     line-height: 33px;
-    color: #229F97;
+    color: #06c5b8;
   }
   .copyRegNumber {
     font-family: "Inter";
@@ -25,9 +25,9 @@
     font-weight: 600;
     font-size: 20px;
     line-height: 15px;
-    color: #229F97;
+    color: #0db9ad;
     padding: 5px;
-    background: #d9d9d9;
+    background: #e00808;
     border-radius: 6px;
     div {
       padding: 4px 0 0 0;
@@ -47,10 +47,10 @@
     font-family: "Inter";
     font-style: normal;
     font-weight: 400;
-    font-size: 13px;
+    font-size: 15px;
     line-height: 18px;
 
-    color: #032b3d;
+    color: #000000;
   }
   textarea {
     border: 1px solid rgba(207, 207, 207, 0.41);
@@ -62,10 +62,10 @@
     width: 315px;
     height: 42px;
     padding: 0 15px;
-    background-color: white;
+    background-color: #f9f9f9ec;
   }
   .modal-footer button {
-    background: #229F97;
+    background: #067d75;
     color: white;
     border-radius: 4px;
     width: 191px;
@@ -77,7 +77,7 @@
     place-items: center;
     justify-content: center;
     &.cancel {
-      background: #b6c0c9;
+      background: #527faa;
     }
   }
 }

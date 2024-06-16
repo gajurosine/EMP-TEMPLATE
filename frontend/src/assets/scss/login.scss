@@ -8,10 +8,11 @@
     font-size: 20px;
     line-height: 24px;
     text-align: center;
-
-    color: #1b1b1c;
+     color: #60A5FA;
+    ;
     .small{
       font-size: 17px;
+      color: #1a1b1a;
     }
   }
   input {
@@ -24,8 +25,15 @@
     font-size: 17px;
 
     &.bg {
+      background-color: #f1f2f2;
       padding: 0 15px;
-      border: 1px solid #0cbd82;
+      border: 1px solid #e5ebeb;
+      border-radius: 3px;
+    
+    }
+    .input-container{
+      background-color: red;
+  
     }
   }
 }

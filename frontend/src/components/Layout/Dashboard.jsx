@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/images/logostudent.png";
 import activeHome from "../../assets/images/white-home-icon.svg";
 import home from "../../assets/images/blued-home-icon.svg";
 import user_ from "../../assets/images/user.svg";

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logostudent.png";
 import "../assets/scss/login.scss";
 import toast from "react-hot-toast";
 import AppServices from "../services";
@@ -138,16 +138,16 @@ function Login() {
           </div>
           <div className="input-container  mb-8">
             <input
-              className="submit bg-[#0F5A65] text-main cursor-pointer"
+              className="submit bg-[#0F5A65] rounded-sm  text-main cursor-pointer"
               type="submit"
               value="submit"
             />
           </div>
           <div
             onClick={toggleModal}
-            className="input-container  mb-[-60px] cursor-pointer text-green-700 	"
+            className="input-container  mb-[-60px] cursor-pointer"
           >
-            Don't have an account? <span className="text-green-700 " >Create Account</span> 
+            Don't have an account? <span className="underline">Create Account</span>
           </div>
         </form>
       </div>
